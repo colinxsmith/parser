@@ -11,12 +11,11 @@ for(let i =0;i<line_len;++i){
     read += 'a';
 }
 var fwords=new test.StringVector(),space=' ';
-DATA['n']=0;
-DATA['nsect']=5;
-DATA['alpha']=[1,2,3,4,5];
-fwords[0]='n';
-fwords[1]='nsect';
-test.Parser('paritysplit.log','n nsect nfac alpha sectors SV FL FC BFGS DiffGrad',read,line_len,fwords,DATA,space);
+test.Parser('paritysplit.log','n alpha',read,line_len,fwords,DATA,space);
+//  console.log(test.getv(DATA,'alpha'));
+var vec=Array(test.geti(DATA,'n'));
+console.log(DATA.size(),fwords.size());
+console.log(test.geti(DATA,'n'));
+test.getvec(DATA,'alpha',vec);
+console.log(vec);
 console.log(test.getv(DATA,'alpha'));
-
-console.log(DATA,fwords);

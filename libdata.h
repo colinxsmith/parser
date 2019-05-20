@@ -6,6 +6,7 @@
 #include<fstream>
 #include<algorithm>
 #include<cmath>
+#include<cstdio>
 #ifdef WIN32
 #define atoll atol
 #endif

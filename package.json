@@ -1,17 +1,27 @@
 {
   "name": "parserjs",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "installOpt": "./swigstep.sh && node-gyp rebuild && npm run runme",
-    "runme": "node runme.js"
+    "runme": "node runme.js",
+    "install": "node-gyp rebuild"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "node": "^12.2.0",
     "node-gyp": "^4.0.0"
-  }
+  },
+  "gypfile": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinxsmith/parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/colinxsmith/parser/issues"
+  },
+  "homepage": "https://github.com/colinxsmith/parser#readme",
+  "description": ""
 }

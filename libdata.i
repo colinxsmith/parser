@@ -127,11 +127,15 @@ using System.Runtime.InteropServices;
 	}
 #elif defined(SWIGJAVASCRIPT)
     if($1) {
+		fprintf(stderr,"out typemap\n");
 		std::map< std::string , std::vector<double> > map=*arg1;
-        v8::Local<v8::Array> arr= v8::Local<v8::Array>::Cast($result);
-        for(size_t i = 0;i < map[arg2].size();++i) {
-            arr->Set(SWIGV8_CURRENT_CONTEXT(),i,SWIG_From_double($1[i])).FromJust();
+		v8::Local<v8::Array> kkk = v8::Local<v8::Array>::Cast($result)->New(v8::Isolate::GetCurrent(),map[arg2].size());
+		fprintf(stderr,"out typemap\n");
+        for(size_t i = 0;i < kkk->Length();++i) {
+			fprintf(stderr,"%ld %f\n",i,$1[i]);
+            kkk->Set(SWIGV8_CURRENT_CONTEXT(),i,SWIG_From_double($1[i])).FromJust();
         }
+		$result=v8::Local<v8::Value>::Cast(kkk);
     }
 #elif defined( SWIGPERL)
 	if($1)
