@@ -1,0 +1,17 @@
+{
+  "name": "parserjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "installOpt": "./swigstep.sh && node-gyp rebuild && npm run runme",
+    "runme": "node runme.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node": "^12.2.0",
+    "node-gyp": "^4.0.0"
+  }
+}
