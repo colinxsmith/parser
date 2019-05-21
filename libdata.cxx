@@ -283,9 +283,6 @@ namespace libdata
 	void Parser(std::istream&input,const std::string words,char*read,const size_t line_len,
 	std::vector< std::string >&fwords,std::map< std::string,std::vector<double> >&DATA,const char* space)
 	{
-		fprintf(stderr,"words %s\n",words.c_str());
-		fprintf(stderr,"line_len %d\n",line_len);
-		fprintf(stderr,"space %s\n",space);
 	/*	std::map< std::string,std::vector<double> >::iterator kk;
 		for(kk=DATA.begin();kk!=DATA.end();++kk)
 			DATA.erase(kk);*/
@@ -355,7 +352,6 @@ namespace libdata
 				data.clear();
 				split(line,data,space);
 				DATA[keep]=data;
-				fprintf(stderr,"%s %s\n",keep.c_str(),line.c_str());
 			}	
 		}
 	}
@@ -372,8 +368,5 @@ namespace libdata
 		else
 			std::cout << "\x1b[1;1;31mCannot open file "<< filename<<"\x1b[0;m"<< std::endl;
 		infile.clear();
-		std::map< std::string,std::vector<double> >::iterator kk;
-		for(kk=DATA.begin();kk!=DATA.end();++kk)
-			fprintf(stderr,"%s \n",kk->first.c_str());
 	}	
 }

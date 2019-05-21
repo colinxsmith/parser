@@ -19,3 +19,4 @@ console.log(test.geti(DATA,'n'));
 test.getvec(DATA,'alpha',vec);
 console.log(vec);
 console.log(test.getv(DATA,'alpha'));
+console.log(test.getv(DATA,'n'));
