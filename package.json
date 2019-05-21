@@ -6,6 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "installOpt": "./swigstep.sh && node-gyp rebuild && npm run runme",
     "runme": "node runme.js",
+    "logger": "node checklog.js",
     "install": "node-gyp rebuild"
   },
   "author": "",
