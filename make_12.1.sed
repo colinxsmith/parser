@@ -15,3 +15,4 @@
  sed -i "/exports_obj->Set/s/);/).FromJust();/g" $file
  sed -i "/SetHiddenPrototype/s|_exports|// _exports|"  $file
  sed -i "/handle.MarkIndependent(/s|cdata|// cdata|" $file
+ 
