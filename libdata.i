@@ -681,7 +681,10 @@ ENDJAVA
 using namespace libdata;
 %}
 %template(getv) libdata::getvector<double>;
+%template(getvv) libdata::getvectorV<std::vector<double>>;
 %template(gets) libdata::getscalar<double>;
+%template(getsvec) libdata::getfword<std::string>;// get string from vector of strings
+%template(getvvec) libdata::getfword<double>;// get double from vector of doubles
 %template(geti) libdata::getscalar<long>;
 %template(dumpv) libdata::dumpvectorf<double>;
 %template(dumps) libdata::dumpvectorf<char*>;

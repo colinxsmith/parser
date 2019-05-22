@@ -66,12 +66,12 @@ const Q = test.getv(DATA, 'Q') === undefined ? [] : test.getv(DATA, 'Q');
 const SV = test.getv(DATA, 'SV') === undefined ? [] : test.getv(DATA, 'SV');
 const FL = test.getv(DATA, 'FL') === undefined ? [] : test.getv(DATA, 'FL');
 const FC = test.getv(DATA, 'FC') === undefined ? [] : test.getv(DATA, 'FC');
-const gamma = test.gets(DATA, 'gamma');
+const gamma = 0.5;//test.gets(DATA, 'gamma');
 const initial = test.getv(DATA, 'initial') === undefined ? [] : test.getv(DATA, 'initial');
-const delta = test.gets(DATA, 'delta');
+const delta = 0.1;//test.gets(DATA, 'delta');
 const buy = test.getv(DATA, 'buy') === undefined ? [] : test.getv(DATA, 'buy');
 const sell = test.getv(DATA, 'sell') === undefined ? [] : test.getv(DATA, 'sell');
-const kappa = test.gets(DATA, 'kappa');
+const kappa = -1;//test.gets(DATA, 'kappa');
 const basket = test.gets(DATA, 'basket');
 const longbasket = test.gets(DATA, 'longbasket');
 const downrisk = test.gets(DATA, 'downrisk');
@@ -79,18 +79,18 @@ const downfactor = test.gets(DATA, 'downfactor');
 const shortbasket = test.gets(DATA, 'shortbasket');
 const tradebuy = test.gets(DATA, 'tradebuy');
 const tradesell = test.gets(DATA, 'tradesell');
-const tradenum = test.gets(DATA, 'tradenum');
-const revise = test.gets(DATA, 'revise');
-const costs = test.gets(DATA, 'costs');
+const tradenum = -1;//test.gets(DATA, 'tradenum');
+const revise = 1;//test.gets(DATA, 'revise');
+const costs = 0;//test.gets(DATA, 'costs');
 const min_holding = -1;//test.gets(DATA, 'min_holding');
-const min_trade = 1e-1;//test.gets(DATA, 'min_trade');
+const min_trade = -1;//test.gets(DATA, 'min_trade');
 const ls = test.gets(DATA, 'ls');
 const full = test.gets(DATA, 'full');
 const minRisk = test.gets(DATA, 'minRisk');
 const maxRisk = test.gets(DATA, 'maxRisk');
 const rmin = test.gets(DATA, 'rmin');
 const rmax = test.gets(DATA, 'rmax');
-const round = 0;//test.gets(DATA, 'round');
+const round = 1;//test.gets(DATA, 'round');
 const min_lot = test.getv(DATA, 'size_lot') === undefined ? [] : test.getv(DATA, 'size_lot');
 const size_lot = test.getv(DATA, 'size_lot') === undefined ? [] : test.getv(DATA, 'size_lot');
 const ncomp = test.gets(DATA, 'ncomp');
@@ -116,10 +116,10 @@ const logfile = 'opt.log';
 const zetaS = 1, zetaF = 1, never_slow = 0, mem_kbytes = [];
 for (let i = 0; i < n; ++i) {
     L[i] = 0;
-    min_lot[i] = 1e-5;
-    size_lot[i] = 1e-5;
+    min_lot[i] = 1e-3;
+    size_lot[i] = 1e-4;
 }
-U[n]=1;
+U[n] = 1;
 const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, [], w, m, A, L, U, alpha, bench, Q,
     gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
     ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
@@ -127,4 +127,23 @@ const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, [], w, m, A, L, U, alp
     mask, log, logfile, downrisk, downfactor, longbasket, shortbasket, tradebuy, tradesell, zetaS,
     zetaF, ShortCostScale, valuel, Abs_L, shortalphacost, never_slow, mem_kbytes, soft_m, soft_l,
     soft_b, soft_L, soft_U, soft_A);
-console.log(opt.Return_Message(back), w);
+let turnover = 0;
+if (initial != []) {
+    w.forEach((d, i) => {
+        turnover += Math.abs(d - initial[i]);
+    });
+}
+turnover /= 2;
+console.log(opt.Return_Message(back), turnover);
+if (round) {
+    size_lot.forEach((d, i) => {
+        if (d === i) {
+            console.log('Bound not set for stock ' + i);
+        }
+    });
+}
+if(initial!=[]){
+    initial.forEach((d,i)=>{
+        console.log('trade'+i+'    '+(w[i]-d));
+    });
+}
