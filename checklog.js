@@ -24,7 +24,7 @@ extern "C"  short  Optimise_internalCVPAFblSaMSoft(dimen n,long nfac,char** stoc
 									dimen soft_m=0,vector soft_l=0,vector soft_b=0,
                                     vector soft_L=0,vector soft_U=0,vector soft_A=0);
 */
-const DATA = new test.DoubleMap();
+const DATA = new test.StringMap();
 
 const line_len = 50000;
 let read = '';
@@ -39,7 +39,7 @@ test.Parser('/SDrive/logFile.log', keys, read, line_len, fwords, DATA, space);
 keys.split(' ').forEach(kk => {
     const sss = scalars.split(' ');
     if (sss.includes(kk)) {
-        console.log('scalar', kk, test.gets(DATA, kk));
+        console.log('scalar', kk, +test.gets(DATA, kk));
     } else {
         console.log(kk, (test.getv(DATA, kk)) === undefined ? 'blank' : 'length ' + (test.getv(DATA, kk)).length);
     }
@@ -47,12 +47,13 @@ keys.split(' ').forEach(kk => {
 
 console.log(fwords.size(), keys.split(' ').length);
 
-const n = test.gets(DATA, 'n');
-const nfac = test.gets(DATA, 'nfac');
-const m = test.gets(DATA, 'm');
+const n = +test.gets(DATA, 'n');
+const nfac = +test.gets(DATA, 'nfac');
+const names = test.getv(DATA, 'names');
+const m = +test.gets(DATA, 'm');
 const A = test.getv(DATA, 'A') === undefined ? [] : test.getv(DATA, 'A');
 const L = test.getv(DATA, 'L') === undefined ? [] : test.getv(DATA, 'L');
-const soft_m = test.gets(DATA, 'soft_m');
+const soft_m = +test.gets(DATA, 'soft_m');
 const soft_A = test.getv(DATA, 'soft_A') === undefined ? [] : test.getv(DATA, 'soft_A');
 const soft_L = test.getv(DATA, 'soft_L') === undefined ? [] : test.getv(DATA, 'soft_L');
 const soft_U = test.getv(DATA, 'soft_U') === undefined ? [] : test.getv(DATA, 'soft_U');
@@ -66,47 +67,47 @@ const Q = test.getv(DATA, 'Q') === undefined ? [] : test.getv(DATA, 'Q');
 const SV = test.getv(DATA, 'SV') === undefined ? [] : test.getv(DATA, 'SV');
 const FL = test.getv(DATA, 'FL') === undefined ? [] : test.getv(DATA, 'FL');
 const FC = test.getv(DATA, 'FC') === undefined ? [] : test.getv(DATA, 'FC');
-const gamma = 0.5;//test.gets(DATA, 'gamma');
+const gamma = 0.5;//+test.gets(DATA, 'gamma');
 const initial = test.getv(DATA, 'initial') === undefined ? [] : test.getv(DATA, 'initial');
-const delta = 0.1;//test.gets(DATA, 'delta');
+const delta = 0.1;//+test.gets(DATA, 'delta');
 const buy = test.getv(DATA, 'buy') === undefined ? [] : test.getv(DATA, 'buy');
 const sell = test.getv(DATA, 'sell') === undefined ? [] : test.getv(DATA, 'sell');
-const kappa = -1;//test.gets(DATA, 'kappa');
-const basket = test.gets(DATA, 'basket');
-const longbasket = test.gets(DATA, 'longbasket');
-const downrisk = test.gets(DATA, 'downrisk');
-const downfactor = test.gets(DATA, 'downfactor');
-const shortbasket = test.gets(DATA, 'shortbasket');
-const tradebuy = test.gets(DATA, 'tradebuy');
-const tradesell = test.gets(DATA, 'tradesell');
-const tradenum = -1;//test.gets(DATA, 'tradenum');
-const revise = 1;//test.gets(DATA, 'revise');
-const costs = 0;//test.gets(DATA, 'costs');
-const min_holding = -1;//test.gets(DATA, 'min_holding');
-const min_trade = -1;//test.gets(DATA, 'min_trade');
-const ls = test.gets(DATA, 'ls');
-const full = test.gets(DATA, 'full');
-const minRisk = test.gets(DATA, 'minRisk');
-const maxRisk = test.gets(DATA, 'maxRisk');
-const rmin = test.gets(DATA, 'rmin');
-const rmax = test.gets(DATA, 'rmax');
-const round = 1;//test.gets(DATA, 'round');
+const kappa = -1;//+test.gets(DATA, 'kappa');
+const basket = +test.gets(DATA, 'basket');
+const longbasket = +test.gets(DATA, 'longbasket');
+const downrisk = +test.gets(DATA, 'downrisk');
+const downfactor = +test.gets(DATA, 'downfactor');
+const shortbasket = +test.gets(DATA, 'shortbasket');
+const tradebuy = +test.gets(DATA, 'tradebuy');
+const tradesell = +test.gets(DATA, 'tradesell');
+const tradenum = -1;//+test.gets(DATA, 'tradenum');
+const revise = 1;//+test.gets(DATA, 'revise');
+const costs = 0;//+test.gets(DATA, 'costs');
+const min_holding = -1;//+test.gets(DATA, 'min_holding');
+const min_trade = -1;//+test.gets(DATA, 'min_trade');
+const ls = +test.gets(DATA, 'ls');
+const full = +test.gets(DATA, 'full');
+const minRisk = +test.gets(DATA, 'minRisk');
+const maxRisk = +test.gets(DATA, 'maxRisk');
+const rmin = +test.gets(DATA, 'rmin');
+const rmax = +test.gets(DATA, 'rmax');
+const round = 1;//+test.gets(DATA, 'round');
 const min_lot = test.getv(DATA, 'size_lot') === undefined ? [] : test.getv(DATA, 'size_lot');
 const size_lot = test.getv(DATA, 'size_lot') === undefined ? [] : test.getv(DATA, 'size_lot');
-const ncomp = test.gets(DATA, 'ncomp');
+const ncomp = +test.gets(DATA, 'ncomp');
 const Composites = test.getv(DATA, 'Composites') === undefined ? [] : test.getv(DATA, 'Composites');
-const value = test.gets(DATA, 'value');
-const valuel = test.gets(DATA, 'valuel');
-const npiece = test.gets(DATA, 'npiece');
+const value = +test.gets(DATA, 'value');
+const valuel = +test.gets(DATA, 'valuel');
+const npiece = +test.gets(DATA, 'npiece');
 const hpiece = test.getv(DATA, 'hpiece') === undefined ? [] : test.getv(DATA, 'hpiece');
 const pgrad = test.getv(DATA, 'pgrad') === undefined ? [] : test.getv(DATA, 'pgrad');
-const nabs = test.gets(DATA, 'nabs');
+const nabs = +test.gets(DATA, 'nabs');
 const A_abs = test.getv(DATA, 'A_abs') === undefined ? [] : test.getv(DATA, 'A_abs');
-const mabs = test.gets(DATA, 'mabs');
+const mabs = +test.gets(DATA, 'mabs');
 const I_A = test.getv(DATA, 'I_A') === undefined ? [] : test.getv(DATA, 'I_A');
 const Abs_U = test.getv(DATA, 'Abs_U') === undefined ? [] : test.getv(DATA, 'Abs_U');
 const Abs_L = test.getv(DATA, 'Abs_L') === undefined ? [] : test.getv(DATA, 'Abs_U');
-const ShortCostScale = test.gets(DATA, 'ShortCostScale');
+const ShortCostScale = +test.gets(DATA, 'ShortCostScale');
 const mask = test.getv(DATA, 'mask') === undefined ? [] : test.getv(DATA, 'mask');
 const w = Array(n);
 const ogamma = Array(1);
@@ -117,10 +118,10 @@ const zetaS = 1, zetaF = 1, never_slow = 0, mem_kbytes = [];
 for (let i = 0; i < n; ++i) {
     L[i] = 0;
     min_lot[i] = 1e-3;
-    size_lot[i] = 1e-4;
+    size_lot[i] = 1e-3;
 }
 U[n] = 1;
-const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, [], w, m, A, L, U, alpha, bench, Q,
+const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, names, w, m, A, L, U, alpha, bench, Q,
     gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
     ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
     npiece, hpiece, pgrad, nabs, A_abs, mabs, I_A, Abs_U, FC, FL, SV, minRisk, maxRisk, ogamma,
@@ -142,8 +143,8 @@ if (round) {
         }
     });
 }
-if(initial!=[]){
-    initial.forEach((d,i)=>{
-        console.log('trade'+i+'    '+(w[i]-d));
+if (initial != []) {
+    initial.forEach((d, i) => {
+        console.log('trade' + i + '    ' + (w[i] - d));
     });
 }

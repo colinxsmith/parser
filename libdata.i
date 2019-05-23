@@ -44,6 +44,7 @@ using System.Collections.Generic;
   }
 
 %typemap(out) double* "$result=$1;"
+%typemap(out) std::string* "$result=$1;"
 #endif
 
 #ifdef SWIGJAVA
@@ -114,6 +115,18 @@ using System.Runtime.InteropServices;
 }
 #endif
 #if	defined( SWIGPYTHON) || defined( SWIGPERL)|| defined( SWIGJAVA)|| defined( SWIGJAVASCRIPT)
+%typemap(out) std::string*
+{
+    if($1) {
+		std::map< std::string , std::vector<std::string> > map=*arg1;
+		v8::Local<v8::Array> kkk = v8::Local<v8::Array>::Cast($result)->New(v8::Isolate::GetCurrent(),map[arg2].size());
+        for(size_t i = 0;i < kkk->Length();++i) {
+            kkk->Set(SWIGV8_CURRENT_CONTEXT(),i,SWIG_FromCharPtr($1[i].c_str())).FromJust(); //here
+        }
+		$result=v8::Local<v8::Value>::Cast(kkk);
+    }
+	
+}
 %typemap(out) double*
 {//$result $1
 #ifdef SWIGPYTHON
@@ -168,6 +181,15 @@ using System.Runtime.InteropServices;
 	}
 #endif
 }
+%typemap(argout)	std::string*
+{    
+	if($1 && $input->IsArray()) {
+        v8::Local<v8::Array> arr= v8::Local<v8::Array>::Cast($input);
+        for(size_t i = 0;i < arr->Length();++i) {
+            arr->Set(SWIGV8_CURRENT_CONTEXT(),i,SWIG_FromCharPtr($1[i].c_str())).FromJust();
+        }
+    }
+}
 %typemap(argout)	double*
 {
 #ifdef SWIGPYTHON
@@ -209,6 +231,24 @@ using System.Runtime.InteropServices;
 		$1=0;//Because we cannot delete[] it later on;
 	}
 #endif
+}
+%typemap(in) std::string*
+{
+		$1 = 0;
+		if($input->IsArray())
+    {
+        v8::Local<v8::Array> arr= v8::Local<v8::Array>::Cast($input);
+        if(arr->Length()) {
+            $1 = new std::string[arr->Length()];
+            for(size_t i = 0;i < arr->Length();++i) {
+                v8::Local<v8::String> kkk = v8::Local<v8::String>::Cast( SWIGV8_TO_STRING(arr->Get(SWIGV8_CURRENT_CONTEXT(),i).ToLocalChecked()));
+				char*kkkk=new char[SWIGV8_UTF8_LENGTH(kkk)*sizeof(*kkk)+1];
+				SWIGV8_WRITE_UTF8(kkk,kkkk,SWIGV8_UTF8_LENGTH(kkk));
+				kkkk[SWIGV8_UTF8_LENGTH(kkk)]='\0';
+				$1[i]=std::string(kkkk);
+            }
+        }
+    }
 }
 %typemap(in) double*
 {
@@ -295,7 +335,7 @@ using System.Runtime.InteropServices;
 #endif
 }
 
-%typemap(in) double*out
+%typemap(in) double*out,std::string*out
 {
 #ifdef SWIGPYTHON
 	if(true)
@@ -421,6 +461,7 @@ namespace std {
     %template(DoubleVector) vector<double>;
     %template(StringVector) vector<std::string>;
     %template(DoubleMap) map< std::string,std::vector<double> >;
+    %template(StringMap) map< std::string,std::vector<std::string> >;
 }
 
 /*			Examples for python, perl and csharp
@@ -681,13 +722,17 @@ ENDJAVA
 using namespace libdata;
 %}
 %template(getv) libdata::getvector<double>;
+%template(getv) libdata::getvector<std::string>;
 %template(getvv) libdata::getvectorV<std::vector<double>>;
+%template(getvv) libdata::getvectorV<std::vector<std::string>>;
 %template(gets) libdata::getscalar<double>;
-%template(getsvec) libdata::getfword<std::string>;// get string from vector of strings
 %template(getvvec) libdata::getfword<double>;// get double from vector of doubles
-%template(geti) libdata::getscalar<long>;
+%template(getvvec) libdata::getfword<std::string>;// get string from vector of strings
+%template(gets) libdata::getscalar<std::string>;
 %template(dumpv) libdata::dumpvectorf<double>;
 %template(dumps) libdata::dumpvectorf<char*>;
+%template(Parser) libdata::Parser<std::string>;
+%template(Parser) libdata::Parser<double>;
 %inline
 %{
 	void getvec1(std::map< std::string,std::vector<double> > mapper,const char*key,double*out,double*back)
@@ -702,6 +747,15 @@ using namespace libdata;
 	void getvec(std::map< std::string,std::vector<double> > mapper,const char*key,double*out)
 	{
 		double*out1 = (double*)getvector<double>(mapper,key);
+		for(size_t i=0;i<mapper[key].size();++i)
+		{
+			//printf("getvec i=%lu %f\n",i,out1[i]);
+			out[i]=out1[i];
+		}
+	}	
+	void getvec(std::map< std::string,std::vector<std::string> > mapper,const char*key,std::string*out)
+	{
+		std::string*out1 = (std::string*)getvector<std::string>(mapper,key);
 		for(size_t i=0;i<mapper[key].size();++i)
 		{
 			//printf("getvec i=%lu %f\n",i,out1[i]);
