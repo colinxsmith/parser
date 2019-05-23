@@ -33,9 +33,9 @@ for (let i = 0; i < line_len; ++i) {
 }
 const fwords = new test.StringVector(),
     space = ' ';
-const keys = 'n nfac m A L soft_m soft_A soft_L soft_U soft_b soft_l U alpha shortalphacost bench Q SV FL FC gamma initial delta buy sell qbuy qsell kappa basket longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum revise costs min_holding min_trade ls full minRisk maxRisk rmin rmax round min_lot size_lot ncomp Composites value valuel npiece hpiece pgrad nabs A_abs mabs I_A Abs_U Abs_L ShortCostScale mask issues five ten forty';
+const keys = 'n nfac m A L names soft_m soft_A soft_L soft_U soft_b soft_l U alpha shortalphacost bench Q SV FL FC gamma initial delta buy sell qbuy qsell kappa basket longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum revise costs min_holding min_trade ls full minRisk maxRisk rmin rmax round min_lot size_lot ncomp Composites value valuel npiece hpiece pgrad nabs A_abs mabs I_A Abs_U Abs_L ShortCostScale mask issues five ten forty';
 const scalars = 'n nfac m soft_m gamma delta kappa basket revise costs rmin longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum value valuel npiece rmax minRisk maxRisk ls full min_trade min_holding round ncomp nabs mabs five ten forty ShortCostScale';
-test.Parser('/SDrive/logFile.log', keys, read, line_len, fwords, DATA, space);
+test.Parser('../safeqp/log.log', keys, read, line_len, fwords, DATA, space);
 keys.split(' ').forEach(kk => {
     const sss = scalars.split(' ');
     if (sss.includes(kk)) {
@@ -67,12 +67,12 @@ const Q = test.getv(DATA, 'Q') === undefined ? [] : test.getv(DATA, 'Q');
 const SV = test.getv(DATA, 'SV') === undefined ? [] : test.getv(DATA, 'SV');
 const FL = test.getv(DATA, 'FL') === undefined ? [] : test.getv(DATA, 'FL');
 const FC = test.getv(DATA, 'FC') === undefined ? [] : test.getv(DATA, 'FC');
-const gamma = 0.5;//+test.gets(DATA, 'gamma');
+const gamma = +test.gets(DATA, 'gamma');
 const initial = test.getv(DATA, 'initial') === undefined ? [] : test.getv(DATA, 'initial');
-const delta = 0.1;//+test.gets(DATA, 'delta');
+const delta = +test.gets(DATA, 'delta');
 const buy = test.getv(DATA, 'buy') === undefined ? [] : test.getv(DATA, 'buy');
 const sell = test.getv(DATA, 'sell') === undefined ? [] : test.getv(DATA, 'sell');
-const kappa = -1;//+test.gets(DATA, 'kappa');
+const kappa = +test.gets(DATA, 'kappa');
 const basket = +test.gets(DATA, 'basket');
 const longbasket = +test.gets(DATA, 'longbasket');
 const downrisk = +test.gets(DATA, 'downrisk');
@@ -80,18 +80,18 @@ const downfactor = +test.gets(DATA, 'downfactor');
 const shortbasket = +test.gets(DATA, 'shortbasket');
 const tradebuy = +test.gets(DATA, 'tradebuy');
 const tradesell = +test.gets(DATA, 'tradesell');
-const tradenum = -1;//+test.gets(DATA, 'tradenum');
-const revise = 1;//+test.gets(DATA, 'revise');
-const costs = 0;//+test.gets(DATA, 'costs');
-const min_holding = -1;//+test.gets(DATA, 'min_holding');
-const min_trade = -1;//+test.gets(DATA, 'min_trade');
+const tradenum = +test.gets(DATA, 'tradenum');
+const revise = +test.gets(DATA, 'revise');
+const costs = +test.gets(DATA, 'costs');
+const min_holding = +test.gets(DATA, 'min_holding');
+const min_trade = +test.gets(DATA, 'min_trade');
 const ls = +test.gets(DATA, 'ls');
 const full = +test.gets(DATA, 'full');
 const minRisk = +test.gets(DATA, 'minRisk');
 const maxRisk = +test.gets(DATA, 'maxRisk');
 const rmin = +test.gets(DATA, 'rmin');
 const rmax = +test.gets(DATA, 'rmax');
-const round = 1;//+test.gets(DATA, 'round');
+const round = +test.gets(DATA, 'round');
 const min_lot = test.getv(DATA, 'size_lot') === undefined ? [] : test.getv(DATA, 'size_lot');
 const size_lot = test.getv(DATA, 'size_lot') === undefined ? [] : test.getv(DATA, 'size_lot');
 const ncomp = +test.gets(DATA, 'ncomp');
@@ -115,12 +115,6 @@ const shake = Array(n);
 const log = 2;
 const logfile = 'opt.log';
 const zetaS = 1, zetaF = 1, never_slow = 0, mem_kbytes = [];
-for (let i = 0; i < n; ++i) {
-    L[i] = 0;
-    min_lot[i] = 1e-3;
-    size_lot[i] = 1e-3;
-}
-U[n] = 1;
 const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, names, w, m, A, L, U, alpha, bench, Q,
     gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
     ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
@@ -128,14 +122,7 @@ const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, names, w, m, A, L, U, 
     mask, log, logfile, downrisk, downfactor, longbasket, shortbasket, tradebuy, tradesell, zetaS,
     zetaF, ShortCostScale, valuel, Abs_L, shortalphacost, never_slow, mem_kbytes, soft_m, soft_l,
     soft_b, soft_L, soft_U, soft_A);
-let turnover = 0;
-if (initial != []) {
-    w.forEach((d, i) => {
-        turnover += Math.abs(d - initial[i]);
-    });
-}
-turnover /= 2;
-console.log(opt.Return_Message(back), turnover);
+console.log(opt.Return_Message(back),w);
 if (round) {
     size_lot.forEach((d, i) => {
         if (d === i) {
@@ -148,3 +135,4 @@ if (initial != []) {
         console.log('trade' + i + '    ' + (w[i] - d));
     });
 }
+console.log('gamma back',ogamma[0]);
