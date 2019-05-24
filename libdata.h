@@ -121,7 +121,10 @@ void Parser(std::istream &input, const std::string words, char *read, const size
 			//data.erase(data.begin(),data.end());
 			data.clear();
 			split(line, data, space);
-			DATA[keep] = data;
+			//if(sizeof(T) == sizeof(double)){
+				std::cout << "checking" << line << std::endl << data.size() << "  "<<data[data.size()-1] << std::endl;
+			//}
+			if(data.size())DATA[keep] = data;
 		}
 	}
 }
