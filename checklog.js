@@ -35,7 +35,7 @@ const fwords = new test.StringVector(),
     space = ' ';
 const keys = 'n nfac m A L names soft_m soft_A soft_L soft_U soft_b soft_l U alpha shortalphacost bench Q SV FL FC gamma initial delta buy sell qbuy qsell kappa basket longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum revise costs min_holding min_trade ls full minRisk maxRisk rmin rmax round min_lot size_lot ncomp Composites value valuel npiece hpiece pgrad nabs A_abs mabs I_A Abs_U Abs_L ShortCostScale mask issues five ten forty';
 const scalars = 'n nfac m soft_m gamma delta kappa basket revise costs rmin longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum value valuel npiece rmax minRisk maxRisk ls full min_trade min_holding round ncomp nabs mabs five ten forty ShortCostScale';
-test.Parser('../safeqp/log.log', keys, read, line_len, fwords, DATA, space);
+test.Parser('run.log', keys, read, line_len, fwords, DATA, space);
 keys.split(' ').forEach(kk => {
     const sss = scalars.split(' ');
     if (sss.includes(kk)) {
