@@ -110,9 +110,9 @@ namespace libdata
 			isp=pp.find(space);
 		}
 		auto rsp=pp.rfind(space);
-		while(rsp==pp.size()-1)//Get rid of spaces at end of line
+		while(rsp==pp.size())//Get rid of spaces at end of line
 		{
-			pp=std::string(pp,0,rsp-1);
+			pp=std::string(pp,0,rsp-2);
 			rsp=pp.rfind(space);
 		}
 		auto is=pp.find(space);
@@ -139,9 +139,9 @@ namespace libdata
 			isp=pp.find(space);
 		}
 		auto rsp=pp.rfind(space);
-		while(rsp==pp.size()-1)//Get rid of spaces at end of line
+		while(rsp==pp.size())//Get rid of spaces at end of line
 		{
-			pp=std::string(pp,0,rsp-1);
+			pp=std::string(pp,0,rsp-2);
 			rsp=pp.rfind(space);
 		}
 		auto is=pp.find(space);
@@ -168,9 +168,9 @@ namespace libdata
 			isp=pp.find(space);
 		}
 		auto rsp=pp.rfind(space);
-		while(rsp==pp.size()-1)//Get rid of spaces at end of line
+		while(rsp==pp.size())//Get rid of spaces at end of line
 		{
-			pp=std::string(pp,0,rsp-1);
+			pp=std::string(pp,0,rsp-2);
 			rsp=pp.rfind(space);
 		}
 		auto is=pp.find(space);
@@ -197,9 +197,9 @@ namespace libdata
 			isp=pp.find(space);
 		}
 		auto rsp=pp.rfind(space);
-		while(rsp==pp.size()-1)//Get rid of spaces at end of line
+		while(rsp==pp.size())//Get rid of spaces at end of line
 		{
-			pp=std::string(pp,0,rsp-1);
+			pp=std::string(pp,0,rsp-2);
 			rsp=pp.rfind(space);
 		}
 		auto is=pp.find(space);
@@ -226,12 +226,13 @@ namespace libdata
 			isp=pp.find(space);
 		}
 		auto rsp=pp.rfind(space);
-		while(rsp==pp.size()-1)//Get rid of spaces at end of line
+		while(rsp==pp.size())//Get rid of spaces at end of line
 		{
-			pp=std::string(pp,0,rsp-1);
+			pp=std::string(pp,0,rsp-2);
 			rsp=pp.rfind(space);
 		}
-		auto is=pp.find(space);
+//		std::cout << "NO SPACE AT END " << pp << std::endl;
+ 		auto is=pp.find(space);
 		auto ic=is;
 		ic=0;
 		while(is!=pp.npos)
@@ -240,8 +241,10 @@ namespace libdata
 			ic=is+sl;
 			is=pp.find(space,ic);
 		}
-		if(ic<pp.size())
+		if(ic<pp.size()){
 			Param.push_back(std::string(pp,ic));
+		//	std::cout << "LAST "<<Param[Param.size()-1]<<std::endl;
+		}
 	}
 	void split(const std::string param,std::vector<char*>&Param,const char* space)
 	{
@@ -255,9 +258,9 @@ namespace libdata
 			isp=pp.find(space);
 		}
 		auto rsp=pp.rfind(space);
-		while(rsp==pp.size()-1)//Get rid of spaces at end of line
+		while(rsp==pp.size())//Get rid of spaces at end of line
 		{
-			pp=std::string(pp,0,rsp-1);
+			pp=std::string(pp,0,rsp-2);
 			rsp=pp.rfind(space);
 		}
 		auto is=pp.find(space);
