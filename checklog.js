@@ -1,5 +1,5 @@
 const test = require("./build/Release/PARSER");
-const opt = require("/home/colin/router/build/Release/OPT");
+const opt = require("../router/build/Release/OPT");
 console.log(opt);
 /*
 extern "C"  short  Optimise_internalCVPAFblSaMSoft(dimen n,long nfac,char** stocknames,vector w_opt,dimen m,
@@ -114,7 +114,10 @@ const ogamma = Array(1);
 const shake = Array(n);
 const log = 2;
 const logfile = 'opt.log';
-const zetaS = 1, zetaF = 1, never_slow = 0, mem_kbytes = [];
+const zetaS = 1,
+    zetaF = 1,
+    never_slow = 0,
+    mem_kbytes = [];
 const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, names, w, m, A, L, U, alpha, bench, Q,
     gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
     ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
@@ -122,7 +125,7 @@ const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, names, w, m, A, L, U, 
     mask, log, logfile, downrisk, downfactor, longbasket, shortbasket, tradebuy, tradesell, zetaS,
     zetaF, ShortCostScale, valuel, Abs_L, shortalphacost, never_slow, mem_kbytes, soft_m, soft_l,
     soft_b, soft_L, soft_U, soft_A);
-console.log(opt.Return_Message(back),w);
+console.log(opt.Return_Message(back), w);
 if (round) {
     size_lot.forEach((d, i) => {
         if (d === i) {
@@ -135,4 +138,4 @@ if (initial != []) {
         console.log('trade' + i + '    ' + (w[i] - d));
     });
 }
-console.log('gamma back',ogamma[0]);
+console.log('gamma back', ogamma[0]);
