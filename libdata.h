@@ -32,110 +32,122 @@ void split(const std::string param, std::vector<std::string> &Param, const char 
 void split(const std::string param, std::vector<char *> &Param, const char *space = " ");
 void breaklog(const int line, const char *data);
 void breaklog(const int line, const std::string data);
-
-	template<typename T>void Parser(std::istream&input,const std::string words,char*read,const size_t line_len,
-	std::vector< std::string >&fwords,std::map< std::string,std::vector<T> >&DATA,const char* space)
-	{
+#ifdef TESTTYPE
+template <typename T>
+void whichTemplate(const char *name, T num)
+{
+	if (sizeof(T) == sizeof(double))
+		fprintf(stderr, "%s DOUBLE\n", name);
+	else if (sizeof(T) == sizeof(int))
+		fprintf(stderr, "%s int\n", name);
+	else if (sizeof(T) == sizeof(std::string))
+		fprintf(stderr, "%s std::string\n", name);
+}
+#endif
+template <typename T>
+void Parser(std::istream &input, const std::string words, char *read, const size_t line_len,
+			std::vector<std::string> &fwords, std::map<std::string, std::vector<T>> &DATA, const char *space)
+{
+#ifdef TESTTYPE
+	T num;
+	whichTemplate("Parser", num);
+#endif
 	/*	std::map< std::string,std::vector<double> >::iterator kk;
 		for(kk=DATA.begin();kk!=DATA.end();++kk)
 			DATA.erase(kk);*/
-		DATA.clear();
-		//By using istream and not ifstream we can pass cin as well file reference for input
-		//Input format is;
-		//			keyword
-		//          data for keyword (possibly across several lines)
-		//--------- indicates the end of the data.
-		std::string line,keep;
-		auto stop=false;
-		std::vector<T> data;
-		size_t count,len;
-		auto addspace=false;
-		while(!input.eof())
+	DATA.clear();
+	//By using istream and not ifstream we can pass cin as well file reference for input
+	//Input format is;
+	//			keyword
+	//          data for keyword (possibly across several lines)
+	//--------- indicates the end of the data.
+	std::string line, keep;
+	auto stop = false;
+	std::vector<T> data;
+	size_t count, len;
+	auto addspace = false;
+	while (!input.eof())
+	{
+		if (!stop)
+			input.getline(read, line_len, '\n');
+		stop = false;
+		line = read;
+		if (line.find("--------") != line.npos)
 		{
-			if(!stop)input.getline(read,line_len,'\n');
-			stop=false;
-			line=read;
-			if(line.find("--------")!=line.npos)
+			breaklog(__LINE__, line);
+			break;
+		}
+		linefeedcheck(line);
+		if (uniquekey(words, line))
+		{
+			addspace = false;
+			fwords.push_back(line);
+			keep = line;
+			input.getline(read, line_len, '\n');
+			count = input.gcount();
+			len = strlen(read);
+			if (len >= 4 && !strncmp(read, "----", 4))
 			{
-				breaklog(__LINE__,line);
+				breaklog(__LINE__, read);
 				break;
 			}
+			addspace = count != len;
+			line = read;
 			linefeedcheck(line);
-			if(uniquekey(words,line))
+			while (!input.eof())
 			{
-				addspace=false;
-				fwords.push_back(line);
-				keep=line;
-				input.getline(read,line_len,'\n');
-				count=input.gcount();
-				len=strlen(read);
-				if(len>=4&&!strncmp(read,"----",4))
+				input.clear();
+				input.getline(read, line_len, '\n');
+				count = input.gcount();
+				if (uniquekey(words, read))
 				{
-					breaklog(__LINE__,read);
+					stop = true;
 					break;
 				}
-				addspace=count!=len;
-				line=read;
-				linefeedcheck(line);
-				while(!input.eof())
+				else if ((len = strlen(read)))
 				{
-					input.clear();
-					input.getline(read,line_len,'\n');
-					count=input.gcount();
-					if(uniquekey(words,read))
+					if (len >= 4 && !strncmp(read, "----", 4))
 					{
-						stop=true;
+						breaklog(__LINE__, read);
 						break;
 					}
-					else if((len=strlen(read)))
-					{
-						if(len>=4&&!strncmp(read,"----",4))
-						{
-							breaklog(__LINE__,read);
-							break;
-						}
-						if(addspace)
-							line+=space;
-						line+=read;
-						linefeedcheck(line);
-						addspace=count!=len;
-					}
+					if (addspace)
+						line += space;
+					line += read;
+					linefeedcheck(line);
+					addspace = count != len;
 				}
-				//data.erase(data.begin(),data.end());
-				data.clear();
-				split(line,data,space);
-				DATA[keep]=data;
-			}	
+			}
+			//data.erase(data.begin(),data.end());
+			data.clear();
+			split(line, data, space);
+			DATA[keep] = data;
 		}
 	}
-	template<typename T>void Parser(const char*filename,const std::string words,char*read,const size_t line_len,
-	std::vector< std::string >&fwords,std::map< std::string,std::vector<T> >&DATA,const char* space)
+}
+template <typename T>
+void Parser(const char *filename, const std::string words, char *read, const size_t line_len,
+			std::vector<std::string> &fwords, std::map<std::string, std::vector<T>> &DATA, const char *space)
+{
+	std::ifstream infile;
+	infile.open(filename);
+	if (infile.is_open())
 	{
-		std::ifstream infile;
-		infile.open(filename);
-		if(infile.is_open())
-		{
-			Parser(infile,words,read,line_len,fwords,DATA,space);
-			infile.close();
-		}
-		else
-			std::cout << "\x1b[1;1;31mCannot open file "<< filename<<"\x1b[0;m"<< std::endl;
-		infile.clear();
-	}	
-/*
-void Parser(std::istream &input, const std::string words, char *read, const size_t line_len,
-			std::vector<std::string> &fwords, std::map<std::string, std::vector<double>> &DATA, const char *space = " ");
-void Parser(const char *filename, const std::string words, char *read, const size_t line_len,
-			std::vector<std::string> &fwords, std::map<std::string, std::vector<double>> &DATA, const char *space = " ");
-void Parser(std::istream &input, const std::string words, char *read, const size_t line_len,
-			std::vector<std::string> &fwords, std::map<std::string, std::vector<std::string>> &DATA, const char *space = " ");
-void Parser(const char *filename, const std::string words, char *read, const size_t line_len,
-			std::vector<std::string> &fwords, std::map<std::string, std::vector<std::string>> &DATA, const char *space = " ");
-*/
+		Parser(infile, words, read, line_len, fwords, DATA, space);
+		infile.close();
+	}
+	else
+		std::cout << "\x1b[1;1;31mCannot open file " << filename << "\x1b[0;m" << std::endl;
+	infile.clear();
+}
 
 template <typename T>
 T *getvector(std::map<std::string, std::vector<T>> &vecmap, const char *name, T *back = nullptr)
 {
+#ifdef TESTTYPE
+	T num;
+	whichTemplate("getvector", num);
+#endif
 	auto pos = vecmap.find(name);
 	if (pos != vecmap.end() && (matchstring(pos->first, name)))
 		back = &pos->second.front();
@@ -144,6 +156,10 @@ T *getvector(std::map<std::string, std::vector<T>> &vecmap, const char *name, T 
 template <typename T>
 T getvectorV(std::map<std::string, T> &vecmap, const std::string name)
 {
+#ifdef TESTTYPE
+	T num;
+	whichTemplate("getvectorV", num);
+#endif
 	auto pos = vecmap.find(name);
 	if (pos != vecmap.end() && (matchstring(pos->first, name)))
 		return pos->second;
@@ -151,6 +167,10 @@ T getvectorV(std::map<std::string, T> &vecmap, const std::string name)
 template <typename T>
 T getscalar(std::map<std::string, std::vector<T>> &vecmap, const char *name)
 {
+#ifdef TESTTYPE
+	T num;
+	whichTemplate("getscaler", num);
+#endif
 	auto pos = vecmap.find(name);
 	if (pos != vecmap.end() && (matchstring(pos->first, name)))
 		return pos->second[0];
@@ -158,6 +178,10 @@ T getscalar(std::map<std::string, std::vector<T>> &vecmap, const char *name)
 template <typename T>
 T getfword(std::vector<T> &fword, const size_t icc)
 {
+#ifdef TESTTYPE
+	T num;
+	whichTemplate("getfword", num);
+#endif
 	if (icc < fword.size())
 	{
 		return (T)fword[icc];
