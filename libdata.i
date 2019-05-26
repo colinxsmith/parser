@@ -117,6 +117,7 @@ using System.Runtime.InteropServices;
 #if	defined( SWIGPYTHON) || defined( SWIGPERL)|| defined( SWIGJAVA)|| defined( SWIGJAVASCRIPT)
 %typemap(out) std::string*
 {
+#ifdef SWIGJAVASCRIPT
     if($1) {
 		std::map< std::string , std::vector<std::string> > map=*arg1;
 		v8::Local<v8::Array> kkk = v8::Local<v8::Array>::Cast($result)->New(v8::Isolate::GetCurrent(),map[arg2].size());
@@ -125,7 +126,7 @@ using System.Runtime.InteropServices;
         }
 		$result=v8::Local<v8::Value>::Cast(kkk);
     }
-	
+#endif
 }
 %typemap(out) double*
 {//$result $1
@@ -182,13 +183,25 @@ using System.Runtime.InteropServices;
 #endif
 }
 %typemap(argout)	std::string*
-{    
+{
+#ifdef SWIGPYTHON
+	int len,i;
+	if($1 && $input && $input != Py_None)
+	{
+		len = PyList_Size($input);
+		for(i = 0;i < len;++i)
+		{
+			PyList_SetItem($arg,i,PyString_FromString($1[i].c_str()));
+		}
+	}
+#elif defined(SWIGJAVASCRIPT)
 	if($1 && $input->IsArray()) {
         v8::Local<v8::Array> arr= v8::Local<v8::Array>::Cast($input);
         for(size_t i = 0;i < arr->Length();++i) {
             arr->Set(SWIGV8_CURRENT_CONTEXT(),i,SWIG_FromCharPtr($1[i].c_str())).FromJust();
         }
     }
+#endif
 }
 %typemap(argout)	double*
 {
@@ -234,6 +247,36 @@ using System.Runtime.InteropServices;
 }
 %typemap(in) std::string*
 {
+#ifdef SWIGPYTHON
+	if(PyList_Check($input))
+	{
+		int size = PyList_Size($input);
+		int i = 0;
+		if(size)
+			$1 = new $*1_ltype[size];
+		else
+			$1 = 0;
+		for(i = 0;i < size;++i)
+		{
+			PyObject *o = PyList_GetItem($input,i);
+			if(PyFloat_Check(o))
+				$1[i] = (PyString_AsString(PyList_GetItem($input,i)));
+			else
+			{
+				PyErr_SetString(PyExc_TypeError,"list must contain strings");
+				delete[] $1;$1=0;
+				return NULL;
+			}
+		}
+	}
+	else if($input == Py_None)
+		$1 = 0;
+	else
+	{
+		PyErr_SetString(PyExc_TypeError,"not a list of strings");
+		return NULL;
+	}
+#elif defined(SWIGJAVASCRIPT)
 		$1 = 0;
 		if($input->IsArray())
     {
@@ -249,6 +292,7 @@ using System.Runtime.InteropServices;
             }
         }
     }
+#endif
 }
 %typemap(in) double*
 {
