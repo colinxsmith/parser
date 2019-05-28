@@ -1,6 +1,6 @@
 const test = require("./build/Release/PARSER");
 const opt = require("../router/build/Release/OPT");
-console.log(opt);
+// console.log(opt);
 /*
 extern "C"  short  Optimise_internalCVPAFblSaMSoft(dimen n,long nfac,char** stocknames,vector w_opt,dimen m,
 									vector AAA,vector L,vector U,vector alpha,
@@ -136,14 +136,17 @@ let holdings = 0,
     minhold = 1e9;
 if (initial != []) {
     let trades = 0,
-        mintrade = 1e9;
+        turnover = 0
+    mintrade = 1e9;
     initial.forEach((d, i) => {
         // console.log('trade' + i + '    ' + (w[i] - d));
         if (Math.abs(d - w[i]) > 1e-9) {
             trades++;
+            turnover += Math.abs(d - w[i]);
             mintrade = Math.min(mintrade, Math.abs(d - w[i]));
         }
     });
+    console.log('Turnover', turnover / 2);
     console.log('Number of trades', trades);
     console.log('Minimum trade', mintrade);
 }
