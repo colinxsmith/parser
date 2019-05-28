@@ -125,7 +125,6 @@ const back = opt.Optimise_internalCVPAFblSaMSoft(n, nfac, names, w, m, A, L, U, 
     mask, log, logfile, downrisk, downfactor, longbasket, shortbasket, tradebuy, tradesell, zetaS,
     zetaF, ShortCostScale, valuel, Abs_L, shortalphacost, never_slow, mem_kbytes, soft_m, soft_l,
     soft_b, soft_L, soft_U, soft_A);
-console.log(opt.Return_Message(back), w);
 if (round) {
     size_lot.forEach((d, i) => {
         if (d === i) {
@@ -133,9 +132,28 @@ if (round) {
         }
     });
 }
+let holdings = 0,
+    minhold = 1e9;
 if (initial != []) {
+    let trades = 0,
+        mintrade = 1e9;
     initial.forEach((d, i) => {
-        console.log('trade' + i + '    ' + (w[i] - d));
+        // console.log('trade' + i + '    ' + (w[i] - d));
+        if (Math.abs(d - w[i]) > 1e-9) {
+            trades++;
+            mintrade = Math.min(mintrade, Math.abs(d - w[i]));
+        }
     });
+    console.log('Number of trades', trades);
+    console.log('Minimum trade', mintrade);
 }
+w.forEach((d, i) => {
+    if (Math.abs(w[i]) > 1e-9) {
+        holdings++;
+        minhold = Math.min(minhold, Math.abs(w[i]));
+    }
+});
+console.log('Number of holdings', holdings);
+console.log('Minimum holding', minhold);
 console.log('gamma back', ogamma[0]);
+console.log(opt.Return_Message(back));
