@@ -37,7 +37,7 @@ template <typename T>
 void whichTemplate(const char *name, T num)
 {
 	if (sizeof(T) == sizeof(double))
-		fprintf(stderr, "%s DOUBLE\n", name);
+		fprintf(stderr, "%s double\n", name);
 	else if (sizeof(T) == sizeof(int))
 		fprintf(stderr, "%s int\n", name);
 	else if (sizeof(T) == sizeof(std::string))
@@ -134,7 +134,7 @@ void Parser(std::istream &input, const std::string words, char *read, const size
 	}
 }
 template <typename T>
-void Parser(const char *filename, const std::string words, char *read, const size_t line_len,
+void Parser(const char *filename, const std::string words,char *read, const size_t line_len,
 			std::vector<std::string> &fwords, std::map<std::string, std::vector<T>> &DATA, const char *space)
 {
 	std::ifstream infile;
@@ -162,6 +162,16 @@ T *getvector(std::map<std::string, std::vector<T>> &vecmap, const char *name, T 
 	return back;
 }
 template <typename T>
+void getvec(std::map< std::string,std::vector<T> > mapper,const char*key,T*out)
+{
+	T*out1 = (T*)getvector<T>(mapper,key);
+	for(size_t i=0;i<mapper[key].size();++i)
+	{
+		//printf("getvec i=%lu %f\n",i,out1[i]);
+		out[i]=out1[i];
+	}
+}	
+template <typename T>
 T getvectorV(std::map<std::string, T> &vecmap, const std::string name)
 {
 #ifdef TESTTYPE
@@ -172,8 +182,8 @@ T getvectorV(std::map<std::string, T> &vecmap, const std::string name)
 	if (pos != vecmap.end() && (matchstring(pos->first, name)))
 		return pos->second;
 }
-template <typename T>
-T getscalar(std::map<std::string, std::vector<T>> &vecmap, const char *name)
+template <typename T,typename B>
+B getscalar(std::map<std::string, std::vector<T>> &vecmap, const char *name)
 {
 #ifdef TESTTYPE
 	T num;
@@ -181,7 +191,18 @@ T getscalar(std::map<std::string, std::vector<T>> &vecmap, const char *name)
 #endif
 	auto pos = vecmap.find(name);
 	if (pos != vecmap.end() && (matchstring(pos->first, name)))
-		return pos->second[0];
+		return (B)pos->second[0];
+}
+template <typename B>
+B getscalar(std::map<std::string, std::vector<std::string>> &vecmap, const char *name)
+{
+#ifdef TESTTYPE
+	std::string num;
+	whichTemplate("getscaler", num);
+#endif
+	auto pos = vecmap.find(name);
+	if (pos != vecmap.end() && (matchstring(pos->first, name)))
+		return (B)atof(pos->second[0].c_str());
 }
 template <typename T>
 T getfword(std::vector<T> &fword, const size_t icc)

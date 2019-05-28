@@ -13,7 +13,7 @@ for (let i = 0; i < line_len; ++i) {
 var fwords = new test.StringVector(), space = ' ';
 test.Parser('paritysplit.log', 'n initial alpha', read, line_len, fwords, DATA, space);
 console.log(test.getv(DATA,'alpha'));
-let vec = Array(+test.gets(DATA, 'n'));
+let vec = Array(+test.geti(DATA, 'n'));
 console.log(vec);
 console.log(DATA.size(), fwords.size());
 console.log(test.gets(DATA, 'n'));

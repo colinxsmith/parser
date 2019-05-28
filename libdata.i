@@ -769,37 +769,23 @@ using namespace libdata;
 %template(getv) libdata::getvector<std::string>;
 %template(getvv) libdata::getvectorV<std::vector<double>>;
 %template(getvv) libdata::getvectorV<std::vector<std::string>>;
-%template(gets) libdata::getscalar<double>;
+%template(gets) libdata::getscalar<double,double>;
+%template(gets) libdata::getscalar<std::string,std::string>;
+%template(geti) libdata::getscalar<double,size_t>;
+%template(geti) libdata::getscalar<size_t>;
 %template(getvvec) libdata::getfword<double>;// get double from vector of doubles
 %template(getvvec) libdata::getfword<std::string>;// get string from vector of strings
-%template(gets) libdata::getscalar<std::string>;
 %template(dumpv) libdata::dumpvectorf<double>;
 %template(dumps) libdata::dumpvectorf<char*>;
 %template(Parser) libdata::Parser<std::string>;
 %template(Parser) libdata::Parser<double>;
+%template(getvec) libdata::getvec<double>;
+%template(getvec) libdata::getvec<std::string>;
 %inline
 %{
 	void getvec1(std::map< std::string,std::vector<double> > mapper,const char*key,double*out,double*back)
 	{
 		double*out1 = (double*)getvector<double>(mapper,key,back);
-		for(size_t i=0;i<mapper[key].size();++i)
-		{
-			//printf("getvec i=%lu %f\n",i,out1[i]);
-			out[i]=out1[i];
-		}
-	}
-	void getvec(std::map< std::string,std::vector<double> > mapper,const char*key,double*out)
-	{
-		double*out1 = (double*)getvector<double>(mapper,key);
-		for(size_t i=0;i<mapper[key].size();++i)
-		{
-			//printf("getvec i=%lu %f\n",i,out1[i]);
-			out[i]=out1[i];
-		}
-	}	
-	void getvec(std::map< std::string,std::vector<std::string> > mapper,const char*key,std::string*out)
-	{
-		std::string*out1 = (std::string*)getvector<std::string>(mapper,key);
 		for(size_t i=0;i<mapper[key].size();++i)
 		{
 			//printf("getvec i=%lu %f\n",i,out1[i]);
