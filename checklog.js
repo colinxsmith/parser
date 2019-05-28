@@ -24,7 +24,7 @@ extern "C"  short  Optimise_internalCVPAFblSaMSoft(dimen n,long nfac,char** stoc
 									dimen soft_m=0,vector soft_l=0,vector soft_b=0,
                                     vector soft_L=0,vector soft_U=0,vector soft_A=0);
 */
-const DATA = new test.StringMap();
+const DATA = new test.DoubleMap();
 
 const line_len = 50000;
 let read = '';
@@ -47,13 +47,13 @@ keys.split(' ').forEach(kk => {
 
 console.log(fwords.size(), keys.split(' ').length);
 
-const n = +test.gets(DATA, 'n');
+const n = +test.geti(DATA, 'n');
 const nfac = +test.gets(DATA, 'nfac');
 const names = test.getv(DATA, 'names');
-const m = +test.gets(DATA, 'm');
+const m = +test.geti(DATA, 'm');
 const A = test.getv(DATA, 'A') === undefined ? [] : test.getv(DATA, 'A');
 const L = test.getv(DATA, 'L') === undefined ? [] : test.getv(DATA, 'L');
-const soft_m = +test.gets(DATA, 'soft_m');
+const soft_m = +test.geti(DATA, 'soft_m');
 const soft_A = test.getv(DATA, 'soft_A') === undefined ? [] : test.getv(DATA, 'soft_A');
 const soft_L = test.getv(DATA, 'soft_L') === undefined ? [] : test.getv(DATA, 'soft_L');
 const soft_U = test.getv(DATA, 'soft_U') === undefined ? [] : test.getv(DATA, 'soft_U');
@@ -73,32 +73,32 @@ const delta = +test.gets(DATA, 'delta');
 const buy = test.getv(DATA, 'buy') === undefined ? [] : test.getv(DATA, 'buy');
 const sell = test.getv(DATA, 'sell') === undefined ? [] : test.getv(DATA, 'sell');
 const kappa = +test.gets(DATA, 'kappa');
-const basket = +test.gets(DATA, 'basket');
-const longbasket = +test.gets(DATA, 'longbasket');
+const basket = +test.geti(DATA, 'basket');
+const longbasket = +test.geti(DATA, 'longbasket');
 const downrisk = +test.gets(DATA, 'downrisk');
 const downfactor = +test.gets(DATA, 'downfactor');
-const shortbasket = +test.gets(DATA, 'shortbasket');
-const tradebuy = +test.gets(DATA, 'tradebuy');
-const tradesell = +test.gets(DATA, 'tradesell');
-const tradenum = +test.gets(DATA, 'tradenum');
-const revise = +test.gets(DATA, 'revise');
-const costs = +test.gets(DATA, 'costs');
+const shortbasket = +test.geti(DATA, 'shortbasket');
+const tradebuy = +test.geti(DATA, 'tradebuy');
+const tradesell = +test.geti(DATA, 'tradesell');
+const tradenum = +test.geti(DATA, 'tradenum');
+const revise = +test.geti(DATA, 'revise');
+const costs = +test.geti(DATA, 'costs');
 const min_holding = +test.gets(DATA, 'min_holding');
 const min_trade = +test.gets(DATA, 'min_trade');
-const ls = +test.gets(DATA, 'ls');
+const ls = +test.geti(DATA, 'ls');
 const full = +test.gets(DATA, 'full');
 const minRisk = +test.gets(DATA, 'minRisk');
 const maxRisk = +test.gets(DATA, 'maxRisk');
 const rmin = +test.gets(DATA, 'rmin');
 const rmax = +test.gets(DATA, 'rmax');
-const round = +test.gets(DATA, 'round');
+const round = +test.geti(DATA, 'round');
 const min_lot = test.getv(DATA, 'size_lot') === undefined ? [] : test.getv(DATA, 'size_lot');
 const size_lot = test.getv(DATA, 'size_lot') === undefined ? [] : test.getv(DATA, 'size_lot');
-const ncomp = +test.gets(DATA, 'ncomp');
+const ncomp = +test.geti(DATA, 'ncomp');
 const Composites = test.getv(DATA, 'Composites') === undefined ? [] : test.getv(DATA, 'Composites');
 const value = +test.gets(DATA, 'value');
 const valuel = +test.gets(DATA, 'valuel');
-const npiece = +test.gets(DATA, 'npiece');
+const npiece = +test.geti(DATA, 'npiece');
 const hpiece = test.getv(DATA, 'hpiece') === undefined ? [] : test.getv(DATA, 'hpiece');
 const pgrad = test.getv(DATA, 'pgrad') === undefined ? [] : test.getv(DATA, 'pgrad');
 const nabs = +test.gets(DATA, 'nabs');
