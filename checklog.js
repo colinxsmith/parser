@@ -110,6 +110,7 @@ if (round) {
         }
     });
 }
+const thresh = Math.sqrt(Math.abs((4 / 3 - 1) * 3 - 1));
 let holdings = 0,
     minhold = 1e9;
 if (initial != []) {
@@ -118,7 +119,7 @@ if (initial != []) {
     mintrade = 1e9;
     initial.forEach((d, i) => {
         // console.log('trade' + i + '    ' + (w[i] - d));
-        if (Math.abs(d - w[i]) > 1e-9) {
+        if (Math.abs(d - w[i]) > thresh) {
             trades++;
             turnover += Math.abs(d - w[i]);
             mintrade = Math.min(mintrade, Math.abs(d - w[i]));
@@ -129,7 +130,7 @@ if (initial != []) {
     console.log('Minimum trade', mintrade);
 }
 w.forEach((d, i) => {
-    if (Math.abs(w[i]) > 1e-9) {
+    if (Math.abs(w[i]) > thresh) {
         holdings++;
         minhold = Math.min(minhold, Math.abs(w[i]));
     }
@@ -142,3 +143,5 @@ const arisk = [1], risk = [1], brisk = [1], pbeta = [1], Rrisk = [1];
 optObj.Get_RisksC(n, nfac, Q, w, 0, arisk, risk, Rrisk, brisk,
     pbeta, ncomp, Composites);
 console.log('risk', risk[0]);
+let kk = (4 / 3 - 1) * 3 - 1;
+console.log(thresh);
