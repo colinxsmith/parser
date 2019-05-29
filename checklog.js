@@ -171,7 +171,7 @@ console.log('Minimum holding', minhold);
 console.log('gamma back', ogamma[0]);
 console.log(optObj.Return_Message(back), mem_kbytes[0], 'kbytes');
 const arisk = [1], risk = [1], brisk = [1], pbeta = [1], Rrisk = [1];
-optObj.Get_RisksC(n, nfac, Q, w, 0, arisk, risk, Rrisk, brisk,
+optObj.Get_RisksC(n, nfac, Q, w, bench, arisk, risk, Rrisk, brisk,
     pbeta, ncomp, Composites);
-console.log('risk', risk[0]);
-let kk = (4 / 3 - 1) * 3 - 1;
+console.log('arisk', arisk[0]);
+console.log('min risk',minRisk,'risk', risk[0],'max risk',maxRisk,'gamma',gamma,ogamma[0]);
