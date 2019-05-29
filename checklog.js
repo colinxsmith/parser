@@ -144,4 +144,3 @@ optObj.Get_RisksC(n, nfac, Q, w, 0, arisk, risk, Rrisk, brisk,
     pbeta, ncomp, Composites);
 console.log('risk', risk[0]);
 let kk = (4 / 3 - 1) * 3 - 1;
-console.log(thresh);
