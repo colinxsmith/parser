@@ -771,8 +771,8 @@ using namespace libdata;
 %template(getvv) libdata::getvectorV<std::vector<std::string>>;
 %template(gets) libdata::getscalar<double,double>;
 %template(gets) libdata::getscalar<std::string,std::string>;
-%template(geti) libdata::getscalar<double,size_t>;
-%template(geti) libdata::getscalar<size_t>;
+%template(geti) libdata::getscalar<double,long>;
+%template(geti) libdata::getscalar<long>;
 %template(getvvec) libdata::getfword<double>;// get double from vector of doubles
 %template(getvvec) libdata::getfword<std::string>;// get string from vector of strings
 %template(dumpv) libdata::dumpvectorf<double>;

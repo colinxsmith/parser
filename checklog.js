@@ -2,7 +2,7 @@ const parseObj = require("./build/Release/PARSER");
 const optObj = require("../router/build/Release/OPT");
 // console.log(opt);
 
-const DATA = new parseObj.DoubleMap();
+const DATA = new parseObj.StringMap();
 
 const line_len = 50000;
 let read = '';
@@ -11,9 +11,9 @@ for (let i = 0; i < line_len; ++i) {
 }
 const fwords = new parseObj.StringVector(),
     space = ' ';
-const keys = 'n nfac m A L names soft_m soft_A soft_L soft_U soft_b soft_l U alpha shortalphacost bench Q SV FL FC gamma initial delta buy sell qbuy qsell kappa basket longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum revise costs min_holding min_trade ls full minRisk maxRisk rmin rmax round min_lot size_lot ncomp Composites value valuel npiece hpiece pgrad nabs A_abs mabs I_A Abs_U Abs_L ShortCostScale mask issues five ten forty';
+const keys = 'n nfac m A L names soft_m soft_A soft_L soft_U soft_b soft_l U qbuy qsell alpha shortalphacost bench Q SV FL FC gamma initial delta buy sell qbuy qsell kappa basket longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum revise costs min_holding min_trade ls full minRisk maxRisk rmin rmax round min_lot size_lot ncomp Composites value valuel npiece hpiece pgrad nabs A_abs mabs I_A Abs_U Abs_L ShortCostScale mask issues five ten forty';
 const scalars = 'n nfac m soft_m gamma delta kappa basket revise costs rmin longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum value valuel npiece rmax minRisk maxRisk ls full min_trade min_holding round ncomp nabs mabs five ten forty ShortCostScale';
-parseObj.Parser('run.log', keys, read, line_len, fwords, DATA, space);
+parseObj.Parser('../safeqp/log.log', keys, read, line_len, fwords, DATA, space);
 keys.split(' ').forEach(kk => {
     const sss = scalars.split(' ');
     if (sss.includes(kk)) {
@@ -23,7 +23,7 @@ keys.split(' ').forEach(kk => {
     }
 });
 
-console.log(fwords.size(), keys.split(' ').length);
+console.log('Kewwords in data file', fwords.size(), 'Expected number', keys.split(' ').length);
 
 const n = +parseObj.geti(DATA, 'n');
 const nfac = +parseObj.geti(DATA, 'nfac');
@@ -31,6 +31,8 @@ const names = parseObj.getv(DATA, 'names');
 const m = +parseObj.geti(DATA, 'm');
 const A = parseObj.getv(DATA, 'A') === undefined ? [] : parseObj.getv(DATA, 'A');
 const L = parseObj.getv(DATA, 'L') === undefined ? [] : parseObj.getv(DATA, 'L');
+const qbuy = parseObj.getv(DATA, 'qbuy') === undefined ? [] : parseObj.getv(DATA, 'qbuy');
+const qsell = parseObj.getv(DATA, 'qsell') === undefined ? [] : parseObj.getv(DATA, 'qsell');
 const soft_m = +parseObj.geti(DATA, 'soft_m');
 const soft_A = parseObj.getv(DATA, 'soft_A') === undefined ? [] : parseObj.getv(DATA, 'soft_A');
 const soft_L = parseObj.getv(DATA, 'soft_L') === undefined ? [] : parseObj.getv(DATA, 'soft_L');
@@ -47,6 +49,7 @@ const FL = parseObj.getv(DATA, 'FL') === undefined ? [] : parseObj.getv(DATA, 'F
 const FC = parseObj.getv(DATA, 'FC') === undefined ? [] : parseObj.getv(DATA, 'FC');
 const gamma = +parseObj.gets(DATA, 'gamma');
 const initial = parseObj.getv(DATA, 'initial') === undefined ? [] : parseObj.getv(DATA, 'initial');
+const issues = parseObj.getv(DATA, 'issues') === undefined ? [] : parseObj.getv(DATA, 'issues');
 const delta = +parseObj.gets(DATA, 'delta');
 const buy = parseObj.getv(DATA, 'buy') === undefined ? [] : parseObj.getv(DATA, 'buy');
 const sell = parseObj.getv(DATA, 'sell') === undefined ? [] : parseObj.getv(DATA, 'sell');
@@ -61,8 +64,25 @@ const tradesell = +parseObj.geti(DATA, 'tradesell');
 const tradenum = +parseObj.geti(DATA, 'tradenum');
 const revise = +parseObj.geti(DATA, 'revise');
 const costs = +parseObj.geti(DATA, 'costs');
-const min_holding = +parseObj.gets(DATA, 'min_holding');
-const min_trade = +parseObj.gets(DATA, 'min_trade');
+const five = +parseObj.gets(DATA, 'five');
+const ten = +parseObj.gets(DATA, 'ten');
+const forty = +parseObj.gets(DATA, 'forty');
+let notV = 0;
+let min_holding = parseObj.getv(DATA, 'min_holding');
+let min_trade = parseObj.getv(DATA, 'min_trade');
+if (!(min_holding.length === 0 || min_holding.length > 1)) {
+    min_holding = +parseObj.gets(DATA, 'min_holding');
+    notV++;
+} else {
+    min_holding = parseObj.getv(DATA, 'min_holding') === undefined ? [] : parseObj.getv(DATA, 'min_holding');
+}
+if (!(min_trade.length === 0 || min_trade.length > 1)) {
+    min_trade = +parseObj.gets(DATA, 'min_trade');
+    notV++;
+} else {
+    min_trade = parseObj.getv(DATA, 'min_trade') === undefined ? [] : parseObj.getv(DATA, 'min_trade');
+}
+console.log(min_holding, min_trade);
 const ls = +parseObj.geti(DATA, 'ls');
 const full = +parseObj.gets(DATA, 'full');
 const minRisk = +parseObj.gets(DATA, 'minRisk');
@@ -96,13 +116,24 @@ const zetaS = 1,
     zetaF = 1,
     never_slow = 0,
     mem_kbytes = [1];
-const back = optObj.Optimise_internalCVPAFblSaMSoft(n, nfac, names, w, m, A, L, U, alpha, bench, Q,
-    gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
-    ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
-    npiece, hpiece, pgrad, nabs, A_abs, mabs, I_A, Abs_U, FC, FL, SV, minRisk, maxRisk, ogamma,
-    mask, log, logfile, downrisk, downfactor, longbasket, shortbasket, tradebuy, tradesell, zetaS,
-    zetaF, ShortCostScale, valuel, Abs_L, shortalphacost, never_slow, mem_kbytes, soft_m, soft_l,
-    soft_b, soft_L, soft_U, soft_A);
+let back;
+if (notV === 2) {
+    back = optObj.Optimise_internalCVPAFblSaMSoftQ(n, nfac, names, w, m, A, L, U, alpha, bench, Q,
+        gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
+        ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
+        npiece, hpiece, pgrad, nabs, A_abs, mabs, I_A, Abs_U, FC, FL, SV, minRisk, maxRisk, ogamma,
+        mask, log, logfile, downrisk, downfactor, longbasket, shortbasket, tradebuy, tradesell, zetaS,
+        zetaF, ShortCostScale, valuel, Abs_L, shortalphacost, never_slow, mem_kbytes, soft_m, soft_l,
+        soft_b, soft_L, soft_U, soft_A, qbuy, qsell, five, ten, forty, issues);
+} else {
+    back = optObj.Optimise_internalCVPAFblSaMSoftQV(n, nfac, names, w, m, A, L, U, alpha, bench, Q,
+        gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
+        ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
+        npiece, hpiece, pgrad, nabs, A_abs, mabs, I_A, Abs_U, FC, FL, SV, minRisk, maxRisk, ogamma,
+        mask, log, logfile, downrisk, downfactor, longbasket, shortbasket, tradebuy, tradesell, zetaS,
+        zetaF, ShortCostScale, valuel, Abs_L, shortalphacost, never_slow, mem_kbytes, soft_m, soft_l,
+        soft_b, soft_L, soft_U, soft_A, qbuy, qsell, five, ten, forty, issues);
+}
 if (round) {
     size_lot.forEach((d, i) => {
         if (d === i) {
