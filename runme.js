@@ -16,7 +16,7 @@ console.log(test.getv(DATA,'alpha'));
 let vec = Array(+test.geti(DATA, 'n'));
 console.log(vec);
 console.log(DATA.size(), fwords.size());
-console.log(test.gets(DATA, 'n'));
+console.log(test.geti(DATA, 'n'));
 test.getvec(DATA, 'alpha', vec);
 console.log(vec);
 console.log(test.getv(DATA, 'alpha'));

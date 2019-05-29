@@ -162,9 +162,9 @@ T *getvector(std::map<std::string, std::vector<T>> &vecmap, const char *name, T 
 	return back;
 }
 template <typename T>
-void getvec(std::map< std::string,std::vector<T> > mapper,const char*key,T*out)
+void getvec(std::map< std::string,std::vector<T> > mapper,const std::string key,T*out)
 {
-	T*out1 = (T*)getvector<T>(mapper,key);
+	T*out1 = (T*)getvector<T>(mapper,key.c_str());
 	for(size_t i=0;i<mapper[key].size();++i)
 	{
 		//printf("getvec i=%lu %f\n",i,out1[i]);
