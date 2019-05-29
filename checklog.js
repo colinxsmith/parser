@@ -174,4 +174,8 @@ const arisk = [1], risk = [1], brisk = [1], pbeta = [1], Rrisk = [1];
 optObj.Get_RisksC(n, nfac, Q, w, bench, arisk, risk, Rrisk, brisk,
     pbeta, ncomp, Composites);
 console.log('arisk', arisk[0]);
-console.log('min risk',minRisk,'risk', risk[0],'max risk',maxRisk,'gamma',gamma,ogamma[0]);
+if (maxRisk >= 0 && minRisk >= 0) {
+    console.log('min risk', minRisk, 'risk', risk[0], 'max risk', maxRisk, 'gamma', gamma, ogamma[0]);
+} else {
+    console.log('risk', risk[0], 'gamma', gamma);
+}
