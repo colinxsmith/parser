@@ -144,7 +144,7 @@ if (round) {
 const thresh = Math.sqrt(Math.abs((4 / 3 - 1) * 3 - 1));
 let holdings = 0,
     minhold = 1e9;
-if (initial != []) {
+if (initial.length) {
     let trades = 0,
         turnover = 0
     mintrade = 1e9;
