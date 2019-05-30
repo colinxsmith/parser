@@ -225,7 +225,7 @@ void printfword(std::vector<T> &fword)
 #endif
 	for(size_t i=0;i<fword.size();++i){
 		std::cout << fword[i] << "\t";
-		if(i%6==0)
+		if(i%6==5)
 			std::cout << std::endl;
 	}
 	std::cout << std::endl;
