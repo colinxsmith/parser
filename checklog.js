@@ -137,11 +137,11 @@ if (notV === 2) {
 if (round) {
     size_lot.forEach((d, i) => {
         if (d === i) {
-            console.log('Bound not set for stock ' + i);
+            console.log('Bound not set for stock\t' + i);
         }
     });
 }
-const thresh = Math.sqrt(Math.abs((4 / 3 - 1) * 3 - 1));
+const rootEps = Math.sqrt(Math.abs((4 / 3 - 1) * 3 - 1));/* 1.4901161193847656e-8*/
 let holdings = 0,
     minhold = 1e9;
 if (initial.length) {
@@ -149,9 +149,9 @@ if (initial.length) {
         turnover = 0
     mintrade = 1e9;
     initial.forEach((d, i) => {
-        if (Math.abs(d - w[i]) > thresh) {
+        turnover += Math.abs(d - w[i]);
+        if (Math.abs(d - w[i]) > rootEps) {
             trades++;
-            turnover += Math.abs(d - w[i]);
             mintrade = Math.min(mintrade, Math.abs(d - w[i]));
         }
     });
@@ -160,7 +160,7 @@ if (initial.length) {
     console.log('Minimum trade', mintrade);
 }
 w.forEach(d => {
-    if (Math.abs(d) > thresh) {
+    if (Math.abs(d) > rootEps) {
         holdings++;
         minhold = Math.min(minhold, Math.abs(d));
     }
@@ -190,19 +190,12 @@ console.log('Relative Return', absReturn - breturn);
 if (buy.length && sell.length) {
     const tcost = [1], utility = [1], gradutility = Array(n), utility_per_stock = Array(n),
         cost_per_stock = Array(n);
-    optObj.MarginalUtilitybSaQ(n, nfac, names, w,
-        bench, initial,
-        Q, gamma, kappa,
-        npiece, hpiece, pgrad,
-        buy, sell,
-        alpha, tcost, utility,
-        gradutility,
-        utility_per_stock,
-        cost_per_stock,
-        ncomp,
-        Composites, ShortCostScale, shortalphacost, qbuy, qsell);
+    optObj.MarginalUtilitybSaQ(n, nfac, names, w, bench, initial, Q, gamma, kappa,
+        npiece, hpiece, pgrad, buy, sell, alpha, tcost, utility,
+        gradutility, utility_per_stock, cost_per_stock,
+        ncomp, Composites, ShortCostScale, shortalphacost, qbuy, qsell);
     console.log('Total transaction cost', tcost[0], '( Total utility', utility[0], ')');
-    if (kappa < 0) {
+    if (kappa < 0 || Math.abs(kappa - gamma) <= rootEps) {
         console.log('Relative Profit', absReturn - breturn - tcost[0]);
     }
 }

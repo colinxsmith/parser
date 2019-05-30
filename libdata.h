@@ -120,23 +120,30 @@ void Parser(std::istream &input, const std::string words, char *read, const size
 			}
 			//data.erase(data.begin(),data.end());
 			data.clear();
-			if(line.size()){
-			split(line, data, space);
-			//if(sizeof(T) == sizeof(double)){
-			//	std::cout << "checking" << line << std::endl << data.size() << "  "<<data[data.size()-1] << std::endl;
-			//}
-			DATA[keep] = data;
-			}else{
-			//	std::cout<<"EMPTY"<<std::endl;
+			if (line.size())
+			{
+				split(line, data, space);
+				//if(sizeof(T) == sizeof(double)){
+				//	std::cout << "checking" << line << std::endl << data.size() << "  "<<data[data.size()-1] << std::endl;
+				//}
+				DATA[keep] = data;
+			}
+			else
+			{
+				//	std::cout<<"EMPTY"<<std::endl;
 				DATA[keep] = data;
 			}
 		}
 	}
 }
 template <typename T>
-void Parser(const char *filename, const std::string words,char *read, const size_t line_len,
+void Parser(const char *filename, const std::string words, char *read, const size_t line_len,
 			std::vector<std::string> &fwords, std::map<std::string, std::vector<T>> &DATA, const char *space)
 {
+#ifdef TESTTYPE
+	T num;
+	whichTemplate("Parser", num);
+#endif
 	std::ifstream infile;
 	infile.open(filename);
 	if (infile.is_open())
@@ -162,15 +169,19 @@ T *getvector(std::map<std::string, std::vector<T>> &vecmap, const char *name, T 
 	return back;
 }
 template <typename T>
-void getvec(std::map< std::string,std::vector<T> > mapper,const std::string key,T*out)
+void getvec(std::map<std::string, std::vector<T>> mapper, const std::string key, T *out)
 {
-	T*out1 = (T*)getvector<T>(mapper,key.c_str());
-	for(size_t i=0;i<mapper[key].size();++i)
+#ifdef TESTTYPE
+	T num;
+	whichTemplate("getvec", num);
+#endif
+	T *out1 = (T *)getvector<T>(mapper, key.c_str());
+	for (size_t i = 0; i < mapper[key].size(); ++i)
 	{
 		//printf("getvec i=%lu %f\n",i,out1[i]);
-		out[i]=out1[i];
+		out[i] = out1[i];
 	}
-}	
+}
 template <typename T>
 T getvectorV(std::map<std::string, T> &vecmap, const std::string name)
 {
@@ -182,7 +193,7 @@ T getvectorV(std::map<std::string, T> &vecmap, const std::string name)
 	if (pos != vecmap.end() && (matchstring(pos->first, name)))
 		return pos->second;
 }
-template <typename T,typename B>
+template <typename T, typename B>
 B getscalar(std::map<std::string, std::vector<T>> &vecmap, const char *name)
 {
 #ifdef TESTTYPE
@@ -223,9 +234,11 @@ void printfword(std::vector<T> &fword)
 	T num;
 	whichTemplate("printfword", num);
 #endif
-	for(size_t i=0;i<fword.size();++i){
+	auto i = fword.size();
+	for (i = 0; i < fword.size(); ++i)
+	{
 		std::cout << fword[i] << "\t";
-		if(i%6==5)
+		if (i % 6 == 5)
 			std::cout << std::endl;
 	}
 	std::cout << std::endl;
