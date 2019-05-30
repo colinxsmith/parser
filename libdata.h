@@ -223,8 +223,12 @@ void printfword(std::vector<T> &fword)
 	T num;
 	whichTemplate("printfword", num);
 #endif
-	for(size_t i=0;i<fword.size();++i)
-		std::cout << fword[i] << std::endl;
+	for(size_t i=0;i<fword.size();++i){
+		std::cout << fword[i] << "\t";
+		if(i%6==0)
+			std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }
 template <typename T>
 class object_order
