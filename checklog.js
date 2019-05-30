@@ -149,7 +149,6 @@ if (initial.length) {
         turnover = 0
     mintrade = 1e9;
     initial.forEach((d, i) => {
-        // console.log('trade' + i + '    ' + (w[i] - d));
         if (Math.abs(d - w[i]) > thresh) {
             trades++;
             turnover += Math.abs(d - w[i]);
@@ -160,22 +159,50 @@ if (initial.length) {
     console.log('Number of trades', trades);
     console.log('Minimum trade', mintrade);
 }
-w.forEach((d, i) => {
-    if (Math.abs(w[i]) > thresh) {
+w.forEach(d => {
+    if (Math.abs(d) > thresh) {
         holdings++;
-        minhold = Math.min(minhold, Math.abs(w[i]));
+        minhold = Math.min(minhold, Math.abs(d));
     }
 });
 console.log('Number of holdings', holdings);
 console.log('Minimum holding', minhold);
 console.log('gamma back', ogamma[0]);
 console.log(optObj.Return_Message(back), mem_kbytes[0], 'kbytes');
+
 const arisk = [1], risk = [1], brisk = [1], pbeta = [1], Rrisk = [1];
 optObj.Get_RisksC(n, nfac, Q, w, bench, arisk, risk, Rrisk, brisk,
     pbeta, ncomp, Composites);
-console.log('arisk', arisk[0]);
+
+console.log('Absolute Risk', arisk[0]);
 if (maxRisk >= 0 && minRisk >= 0) {
     console.log('min risk', minRisk, 'risk', risk[0], 'max risk', maxRisk, 'gamma', gamma, ogamma[0]);
 } else {
-    console.log('risk', risk[0], 'gamma', gamma);
+    console.log('Relative Risk', risk[0], 'gamma', gamma);
+}
+const absReturn=optObj.ddotvec(n,w,alpha);
+console.log('Absolute Return',absReturn);
+let breturn=0;
+if(bench.length){
+    breturn=optObj.ddotvec(n,bench,alpha);
+}
+console.log('Relative Return',absReturn-breturn);
+if (buy.length && sell.length) {
+    const tcost = [1], utility = [1], gradutility = Array(n), utility_per_stock = Array(n),
+        cost_per_stock = Array(n);
+    optObj.MarginalUtilitybSaQ(n, nfac, names, w,
+        bench, initial,
+        Q, gamma, kappa,
+        npiece, hpiece, pgrad,
+        buy, sell,
+        alpha, tcost, utility,
+        gradutility,
+        utility_per_stock,
+        cost_per_stock,
+        ncomp,
+        Composites, ShortCostScale, shortalphacost, qbuy, qsell);
+        console.log('Total transaction cost',tcost[0],'( Total utility',utility[0],')');
+        if(kappa<0){
+            console.log('Relative Profit',absReturn-breturn-tcost[0]);
+        }
 }
