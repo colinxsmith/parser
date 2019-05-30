@@ -781,6 +781,8 @@ using namespace libdata;
 %template(Parser) libdata::Parser<double>;
 %template(getvec) libdata::getvec<double>;
 %template(getvec) libdata::getvec<std::string>;
+%template(printvvec) libdata::printfword<double>;
+%template(printvvec) libdata::printfword<std::string>;
 %inline
 %{
 	void getvec1(std::map< std::string,std::vector<double> > mapper,const char*key,double*out,double*back)

@@ -23,8 +23,8 @@ keys.split(' ').forEach(kk => {
     }
 });
 
-console.log('Kewwords in data file', fwords.size(), 'Expected number', keys.split(' ').length);
-
+console.log('Keywords in data file', fwords.size(), 'number searched by parser', keys.split(' ').length);
+parseObj.printvvec(fwords);
 const n = +parseObj.geti(DATA, 'n');
 const nfac = +parseObj.geti(DATA, 'nfac');
 const names = parseObj.getv(DATA, 'names');
@@ -82,7 +82,7 @@ if (!(min_trade.length === 0 || min_trade.length > 1)) {
 } else {
     min_trade = parseObj.getv(DATA, 'min_trade') === undefined ? [] : parseObj.getv(DATA, 'min_trade');
 }
-console.log(min_holding, min_trade);
+
 const ls = +parseObj.geti(DATA, 'ls');
 const full = +parseObj.gets(DATA, 'full');
 const minRisk = +parseObj.gets(DATA, 'minRisk');
@@ -180,13 +180,13 @@ if (maxRisk >= 0 && minRisk >= 0) {
 } else {
     console.log('Relative Risk', risk[0], 'gamma', gamma);
 }
-const absReturn=optObj.ddotvec(n,w,alpha);
-console.log('Absolute Return',absReturn);
-let breturn=0;
-if(bench.length){
-    breturn=optObj.ddotvec(n,bench,alpha);
+const absReturn = optObj.ddotvec(n, w, alpha);
+console.log('Absolute Return', absReturn);
+let breturn = 0;
+if (bench.length) {
+    breturn = optObj.ddotvec(n, bench, alpha);
 }
-console.log('Relative Return',absReturn-breturn);
+console.log('Relative Return', absReturn - breturn);
 if (buy.length && sell.length) {
     const tcost = [1], utility = [1], gradutility = Array(n), utility_per_stock = Array(n),
         cost_per_stock = Array(n);
@@ -201,8 +201,8 @@ if (buy.length && sell.length) {
         cost_per_stock,
         ncomp,
         Composites, ShortCostScale, shortalphacost, qbuy, qsell);
-        console.log('Total transaction cost',tcost[0],'( Total utility',utility[0],')');
-        if(kappa<0){
-            console.log('Relative Profit',absReturn-breturn-tcost[0]);
-        }
+    console.log('Total transaction cost', tcost[0], '( Total utility', utility[0], ')');
+    if (kappa < 0) {
+        console.log('Relative Profit', absReturn - breturn - tcost[0]);
+    }
 }

@@ -213,8 +213,18 @@ T getfword(std::vector<T> &fword, const size_t icc)
 #endif
 	if (icc < fword.size())
 	{
-		return (T)fword[icc];
+		return fword[icc];
 	}
+}
+template <typename T>
+void printfword(std::vector<T> &fword)
+{
+#ifdef TESTTYPE
+	T num;
+	whichTemplate("printfword", num);
+#endif
+	for(size_t i=0;i<fword.size();++i)
+		std::cout << fword[i] << std::endl;
 }
 template <typename T>
 class object_order
