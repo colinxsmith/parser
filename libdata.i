@@ -252,6 +252,32 @@ using System.Runtime.InteropServices;
             arr->Set(SWIGV8_CURRENT_CONTEXT(),i,SWIG_FromCharPtr($1[i].c_str())).FromJust();
         }
     }
+#elif defined( SWIGPERL)
+	if($arg && $1)//$arg $input
+	{
+		AV *tempav = (AV*) SvRV($arg);//We must use $arg and not $result
+		SV **tv;
+		I32 i,len = 0;
+		len = av_len(tempav) + 1;//av_len returns the highest index in tempav
+		for(i = 0;i < len;++i)
+		{
+			tv = av_fetch(tempav, i, 0);
+			if(!tv)
+				croak("$1 has not been initialised. ");
+			sv_setpv(*tv,$1[i].c_str());
+		}
+	}
+#elif defined(SWIGJAVA)
+	if($1&&$input)
+	{
+		int i;
+		for(i=0;i < (*arg1)[arg2].size();i++)
+		{
+			jstring js = JCALL1(NewStringUTF,jenv,$1[i].c_str());
+			JCALL3(SetObjectArrayElement,jenv,$input,i,js);
+		}
+		$1=0;//Because we cannot delete[] it later on;
+	}
 #endif
 }
 %typemap(argout)	double*
@@ -434,7 +460,7 @@ using System.Runtime.InteropServices;
 {
 	if(true)
 	{
-		size_t size = arg1[arg2].size();
+		size_t size = (*arg1)[arg2].size();
 		if(size)
 			$1 = new $*1_ltype[size];
 		else
@@ -446,7 +472,7 @@ using System.Runtime.InteropServices;
 #ifdef SWIGPYTHON
 	if($1 && $input && $input != Py_None)
 	{
-		size_t need_size = arg1[arg2].size(),len=0,i;
+		size_t need_size = (*arg1)[arg2].size(),len=0,i;
 		if(PyList_Check($input))
 			len = PyList_Size($input);
 		else
@@ -480,14 +506,14 @@ using System.Runtime.InteropServices;
 #elif defined(SWIGJAVASCRIPT)
     if($1 && $input->IsArray()) {
         v8::Local<v8::Array> arr= v8::Local<v8::Array>::Cast($input);
-        for(size_t i = 0;i < arg1[arg2].size();++i) { // May need more code if arg1[arg2].size() > arr->Length()
+        for(size_t i = 0;i < (*arg1)[arg2].size();++i) { // May need more code if (*arg1)[arg2].size() > arr->Length()
             arr->Set(SWIGV8_CURRENT_CONTEXT(),i,SWIG_From_double($1[i])).FromJust();
         }
     }
 #elif defined(SWIGPERL)
 	AV *tempav = (AV*) SvRV($arg);//We must use $arg and not $result
 	SV **tv;
-	I32 i,len = 0,correct_len = arg1[arg2].size();
+	I32 i,len = 0,correct_len = (*arg1)[arg2].size();
 	len = av_len(tempav) + 1;//av_len returns the highest index in tempav
 	if(len != correct_len)
 	{
@@ -630,9 +656,9 @@ $space=" ";
 libhere::Parser("paritysplit.log","n nsect nfac alpha sectors SV FL FC BFGS DiffGrad",$read,$line_len,$fwords,$DATA,$space);
 if($DATA->size())
 {
-	print libhere::geti($DATA,"n");
+	print "n = ",libhere::geti($DATA,"n");
 	$nn = libhere::geti($DATA,"n");
-	print libhere::geti($DATA,"nfac");
+	print "nfac = ",libhere::geti($DATA,"nfac");
 	$alpha=libhere::getv($DATA,"alpha");
 	print @$alpha;
         print libhere::minw($nn,$alpha);
@@ -807,7 +833,7 @@ using namespace libdata;
 %template(printvvec) libdata::printfword<std::string>;
 %inline
 %{
-	void getvec1(std::map< std::string,std::vector<double> > mapper,const char*key,double*out,double*back)
+	void getvec1(std::map< std::string,std::vector<double> > &mapper,const char*key,double*out,double*back)
 	{
 		double*out1 = (double*)getvector<double>(mapper,key,back);
 		for(size_t i=0;i<mapper[key].size();++i)

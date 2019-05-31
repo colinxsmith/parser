@@ -169,7 +169,7 @@ T *getvector(std::map<std::string, std::vector<T>> &vecmap, const char *name, T 
 	return back;
 }
 template <typename T>
-void getvec(std::map<std::string, std::vector<T>> mapper, const std::string key, T *out)
+void getvec(std::map<std::string, std::vector<T>> &mapper, const std::string key, T *out)
 {
 #ifdef TESTTYPE
 	T num;
