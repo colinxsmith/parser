@@ -53,6 +53,16 @@ using System.Collections.Generic;
 %typemap(jstype) double * "double[]"
 %typemap(javain) double * "$javainput"
 %typemap(javaout) double* {return $jnicall;}
+%typemap(jni) long *  "jlongArray"
+%typemap(jtype) long * "long[]"
+%typemap(jstype) long * "long[]"
+%typemap(javain) long * "$javainput"
+%typemap(javaout) long* {return $jnicall;}
+%typemap(jni) std::string *  "jobjectArray"
+%typemap(jtype) std::string * "String[]"
+%typemap(jstype) std::string * "String[]"
+%typemap(javain) std::string * "$javainput"
+%typemap(javaout) std::string* {return $jnicall;}
 %pragma(java) modulecode=
 %{
 	static
@@ -117,7 +127,16 @@ using System.Runtime.InteropServices;
 #if	defined( SWIGPYTHON) || defined( SWIGPERL)|| defined( SWIGJAVA)|| defined( SWIGJAVASCRIPT)
 %typemap(out) std::string*
 {
-#ifdef SWIGJAVASCRIPT
+#ifdef SWIGPYTHON
+	if($1)
+	{
+		std::map< std::string , std::vector<std::string> > map=*arg1;
+		size_t need_size = map[arg2].size(),i;
+		$result=PyList_New(need_size);
+		for(i=0;i<need_size;++i)
+			PyList_SetItem($result,i,PyString_FromString($1[i].c_str()));
+	}
+#elif defined(SWIGJAVASCRIPT)
     if($1) {
 		std::map< std::string , std::vector<std::string> > map=*arg1;
 		v8::Local<v8::Array> kkk = v8::Local<v8::Array>::Cast($result)->New(v8::Isolate::GetCurrent(),map[arg2].size());
@@ -126,6 +145,38 @@ using System.Runtime.InteropServices;
         }
 		$result=v8::Local<v8::Value>::Cast(kkk);
     }
+#elif defined( SWIGPERL)
+	if($1)
+	{
+		std::map< std::string , std::vector<std::string> > map=*arg1;
+		size_t len = map[arg2].size(),i;
+		AV *myav;
+		SV **svs;
+		svs = new SV*[len];
+		for (i = 0; i < len ; i++)
+		{
+			svs[i] = sv_newmortal();
+			sv_setpv((SV*)svs[i],$1[i].c_str());
+		}
+		myav =	av_make(len,svs);
+		delete[]svs;
+		$result = newRV((SV*)myav);
+		sv_2mortal($result);
+		argvi++;                      /* This is critical! */
+	}
+#elif defined(SWIGJAVA)
+	if($1)
+	{
+		std::map< std::string , std::vector<std::string> > map=*arg1;
+		jclass strClass = JCALL1(FindClass,jenv,"java/lang/String");
+		int i;
+		$result = JCALL3(NewObjectArray, jenv, map[arg2].size(), strClass,NULL);
+		for(i=0; i<map[arg2].size(); i++ )
+		{
+			jstring js = JCALL1(NewStringUTF,jenv,$1[i].c_str());
+			JCALL3(SetObjectArrayElement,jenv,$result,i,js);
+		}
+	}
 #endif
 }
 %typemap(out) double*
@@ -381,7 +432,6 @@ using System.Runtime.InteropServices;
 
 %typemap(in) double*out,std::string*out
 {
-#ifdef SWIGPYTHON
 	if(true)
 	{
 		size_t size = arg1[arg2].size();
@@ -390,36 +440,6 @@ using System.Runtime.InteropServices;
 		else
 			$1 = 0;
 	}
-#elif defined(SWIGJAVASCRIPT)
-	if(true)
-	{
-		size_t size = arg1[arg2].size();
-		if(size)
-			$1 = new $*1_ltype[size];
-		else
-			$1 = 0;
-	}
-#elif defined(SWIGPERL)
-	if(true)
-	{
-		size_t size = arg1[arg2].size();
-		if(size)
-			$1 = new $*1_ltype[size];
-		else
-			$1 = 0;
-	}
-#elif defined(SWIGJAVA)
-	$1=0;
-	if($input)
-	{
-		jsize sz = JCALL1(GetArrayLength, jenv, $input);
-		int len = sz;
-		if(len)
-		{
-			$1= (double*)JCALL2(GetDoubleArrayElements, jenv, $input, 0);
-		}
-	}
-#endif
 }
 %typemap(argout)	double*out
 {
@@ -543,9 +563,9 @@ print ('numd=',numd)
 print ('numd[0]=',numd[0])
 
 testvec=[]
-getvec1(map,'a',testvec,[])
-print (testvec)
 getvec(map,'a',testvec)
+print (testvec)
+getvec1(map,'a',testvec,[])
 print (testvec)
 print ("map['a']=",map['a'])
 testvec=getv(map,'a')
@@ -780,7 +800,9 @@ using namespace libdata;
 %template(Parser) libdata::Parser<std::string>;
 %template(Parser) libdata::Parser<double>;
 %template(getvec) libdata::getvec<double>;
+#if !defined(SWIGPYTHON) && !defined(SWIGPERL)
 %template(getvec) libdata::getvec<std::string>;
+#endif
 %template(printvvec) libdata::printfword<double>;
 %template(printvvec) libdata::printfword<std::string>;
 %inline
