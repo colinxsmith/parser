@@ -5,6 +5,8 @@
 %include carrays.i
 %array_functions(double ,doubleArray)
 %array_functions(char* ,sArray)
+%array_functions(std::string ,stringArray)
+%array_functions(long ,longArray)
 #ifdef SWIGCSHARP
 %typemap(csimports) SWIGTYPE %{
 using System;
@@ -21,6 +23,11 @@ using System.Collections.Generic;
 %typemap(ctype) double*   "double*"
 %typemap(csin) double* "$csinput"
 %typemap(imtype, out="global::System.IntPtr") double* "double[]"
+%typemap(imtype) std::string*   "string[]"
+%typemap(cstype) std::string*   "string[]"
+%typemap(ctype) std::string*   "std::string*"
+%typemap(csin) std::string* "$csinput"
+%typemap(imtype, out="global::System.IntPtr") std::string* "string[]"
 
 %typemap(imtype) size_t*   "uint[]"
 %typemap(cstype) size_t*   "uint[]"
@@ -42,9 +49,29 @@ using System.Collections.Generic;
 	}
     return ret;
   }
+  %typemap(csout, excode=SWIGEXCODE) std::string*   {
+    global::System.IntPtr cPtr=$imcall;
+    string[]ret=null;$excode
+    $csclassname ret1 = null;
+    if(cPtr != global::System.IntPtr.Zero) 
+		ret1 = new $csclassname(cPtr, $owner);
+	if(vecmap.ContainsKey(name))
+	{
+		int N=vecmap[name].Count;
+		ret=new string[N];
+		int i;
+		for(i=0;i<N;++i)
+			ret[i]=libhere.stringArray_getitem(ret1,i);//vecmap[name][i];
+	}
+    return ret;
+  }
+
 
 %typemap(out) double* "$result=$1;"
 %typemap(out) std::string* "$result=$1;"
+%typemap(out) long* "$result=$1;"
+%typemap(out) size_t* "$result=$1;"
+%typemap(out) int* "$result=$1;"
 #endif
 
 #ifdef SWIGJAVA
