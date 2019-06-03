@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\checklog.js",
+            "program": "${workspaceFolder}/checklog.js",
             "runtimeVersion": "12.3.1"
         }
     ]
