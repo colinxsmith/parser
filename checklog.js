@@ -182,11 +182,11 @@ if (maxRisk >= 0 && minRisk >= 0) {
 }
 const absReturn = optObj.ddotvec(n, w, alpha);
 console.log('Absolute Return', absReturn);
-let breturn = 0;
+let benchReturn = 0;
 if (bench.length) {
-    breturn = optObj.ddotvec(n, bench, alpha);
+    benchReturn = optObj.ddotvec(n, bench, alpha);
 }
-console.log('Relative Return', absReturn - breturn);
+console.log('Relative Return', absReturn - benchReturn);
 if (buy.length && sell.length) {
     const tcost = [1], utility = [1], gradutility = Array(n), utility_per_stock = Array(n),
         cost_per_stock = Array(n);
@@ -196,6 +196,26 @@ if (buy.length && sell.length) {
         ncomp, Composites, ShortCostScale, shortalphacost, qbuy, qsell);
     console.log('Total transaction cost', tcost[0], '( Total utility', utility[0], ')');
     if (kappa < 0 || Math.abs(kappa - gamma) <= rootEps) {
-        console.log('Relative Profit', absReturn - breturn - tcost[0]);
+        console.log('Relative Profit', absReturn - benchReturn - tcost[0]);
     }
 }
+
+const rreturn = Array(1),areturn=Array(1),Rreturn=Array(1),breturn=Array(1),srisk=Array(1);
+const MCAR=Array(n),MCTR=Array(n),MCRR=Array(n),MCBR=Array(n);
+const FMCRR=Array(n+nfac),FMCTR=Array(n+nfac),FMCAR=Array(n+nfac),FMCBR=Array(n+nfac),FMCSR=Array(n+nfac);
+const beta=Array(n);
+const FX=Array(nfac),RFX=Array(nfac),AFX=Array(nfac),BFX=Array(nfac),SFX=Array(nfac);
+optObj.PropertiesCA(n,nfac,names,w,
+									  bench,
+									  alpha,rreturn,areturn,Rreturn,
+									  breturn,
+									  Q,risk,arisk,Rrisk,brisk,
+									  srisk,
+									  pbeta,
+									  MCAR,MCTR,MCRR,MCBR,
+									  FMCRR,
+									  FMCTR,FMCAR,FMCBR,FMCSR,
+									  beta,
+									  FX,RFX,AFX,BFX,SFX,
+								 	  FL,FC,SV,ncomp,
+									  Composites);
