@@ -200,22 +200,25 @@ if (buy.length && sell.length) {
     }
 }
 
-const rreturn = Array(1),areturn=Array(1),Rreturn=Array(1),breturn=Array(1),srisk=Array(1);
-const MCAR=Array(n),MCTR=Array(n),MCRR=Array(n),MCBR=Array(n);
-const FMCRR=Array(n+nfac),FMCTR=Array(n+nfac),FMCAR=Array(n+nfac),FMCBR=Array(n+nfac),FMCSR=Array(n+nfac);
-const beta=Array(n);
-const FX=Array(nfac),RFX=Array(nfac),AFX=Array(nfac),BFX=Array(nfac),SFX=Array(nfac);
-optObj.PropertiesCA(n,nfac,names,w,
-									  bench,
-									  alpha,rreturn,areturn,Rreturn,
-									  breturn,
-									  Q,risk,arisk,Rrisk,brisk,
-									  srisk,
-									  pbeta,
-									  MCAR,MCTR,MCRR,MCBR,
-									  FMCRR,
-									  FMCTR,FMCAR,FMCBR,FMCSR,
-									  beta,
-									  FX,RFX,AFX,BFX,SFX,
-								 	  FL,FC,SV,ncomp,
-									  Composites);
+const rreturn = Array(1), areturn = Array(1), Rreturn = Array(1), breturn = Array(1), srisk = Array(1);
+const MCAR = Array(n), MCTR = Array(n), MCRR = Array(n), MCBR = Array(n);
+const FMCRR = Array(n + nfac), FMCTR = Array(n + nfac), FMCAR = Array(n + nfac), FMCBR = Array(n + nfac), FMCSR = Array(n + nfac);
+const beta = Array(n);
+const FX = Array(nfac), RFX = Array(nfac), AFX = Array(nfac), BFX = Array(nfac), SFX = Array(nfac);
+optObj.PropertiesCA(n, nfac, names, w, bench, alpha, rreturn, areturn, Rreturn, breturn, Q, risk, arisk, Rrisk, brisk,
+    srisk, pbeta, MCAR, MCTR, MCRR, MCBR, FMCRR, FMCTR, FMCAR, FMCBR, FMCSR, beta, FX, RFX, AFX, BFX, SFX,
+    FL, FC, SV, ncomp, Composites);
+
+console.log('Absolute risk', arisk[0], optObj.ddotvec(n, w, MCTR));
+console.log('Relative risk', risk[0], optObj.ddotvec(n, w, MCAR) - optObj.ddotvec(n, bench, MCAR));
+console.log('Residual risk', Rrisk[0], optObj.ddotvec(n, w, MCRR) - pbeta[0] * optObj.ddotvec(n, bench, MCRR));
+console.log('Portfolio beta', pbeta[0], optObj.ddotvec(n, w, beta));
+
+const fr = optObj.ddotvec(nfac, FMCTR, FX);
+console.log('Absolute Factor Risk', fr);
+let nfr = 0;
+for (let i = nfac; i < n + nfac; ++i) {
+    nfr += FMCTR[i] * w[i - nfac];
+}
+console.log('Absolute Non-factor Risk', nfr);
+console.log('Absolute risk', Math.sqrt(fr * fr + nfr * nfr));
