@@ -7,17 +7,24 @@
 %array_functions(char* ,sArray)
 %array_functions(std::string ,stringArray)
 %array_functions(long ,longArray)
+%array_functions(int ,intArray)
+%array_functions(size_t,size_tArray)
 #ifdef SWIGCSHARP
 %typemap(csimports) SWIGTYPE %{
 using System;
 using System.Runtime.InteropServices;
-//The above are in the default version, additions follow:
 using System.Collections.Generic;
 %}
 %typemap(imtype) int*   "int[]"
 %typemap(cstype) int*   "int[]"
 %typemap(ctype) int*   "int*"
 %typemap(csin) int* "$csinput"
+%typemap(imtype, out="global::System.IntPtr") int* "int[]"
+%typemap(imtype) long*   "long[]"
+%typemap(cstype) long*   "long[]"
+%typemap(ctype) long*   "long*"
+%typemap(csin) long* "$csinput"
+%typemap(imtype, out="global::System.IntPtr") long* "long[]"
 %typemap(imtype) double*   "double[]"
 %typemap(cstype) double*   "double[]"
 %typemap(ctype) double*   "double*"
@@ -33,6 +40,23 @@ using System.Collections.Generic;
 %typemap(cstype) size_t*   "uint[]"
 %typemap(ctype) size_t*   "size_t*"
 %typemap(csin) size_t* "$csinput"
+%typemap(imtype, out="global::System.IntPtr") size_t* "uint[]"
+%typemap(csout, excode=SWIGEXCODE) size_t*   {
+    global::System.IntPtr cPtr=$imcall;
+    uint[]ret=null;$excode
+    $csclassname ret1 = null;
+    if(cPtr != global::System.IntPtr.Zero) 
+		ret1 = new $csclassname(cPtr, $owner);
+	if(vecmap.ContainsKey(name))
+	{
+		int N=vecmap[name].Count;
+		ret=new uint[N];
+		int i;
+		for(i=0;i<N;++i)
+			ret[i]=libhere.size_tArray_getitem(ret1,i);//vecmap[name][i];
+	}
+    return ret;
+  }
 %typemap(csout, excode=SWIGEXCODE) double*   {
     global::System.IntPtr cPtr=$imcall;
     double[]ret=null;$excode
@@ -46,6 +70,38 @@ using System.Collections.Generic;
 		int i;
 		for(i=0;i<N;++i)
 			ret[i]=libhere.doubleArray_getitem(ret1,i);//vecmap[name][i];
+	}
+    return ret;
+  }
+%typemap(csout, excode=SWIGEXCODE) int*   {
+    global::System.IntPtr cPtr=$imcall;
+    int[]ret=null;$excode
+    $csclassname ret1 = null;
+    if(cPtr != global::System.IntPtr.Zero) 
+		ret1 = new $csclassname(cPtr, $owner);
+	if(vecmap.ContainsKey(name))
+	{
+		int N=vecmap[name].Count;
+		ret=new int[N];
+		int i;
+		for(i=0;i<N;++i)
+			ret[i]=libhere.intArray_getitem(ret1,i);//vecmap[name][i];
+	}
+    return ret;
+  }
+  %typemap(csout, excode=SWIGEXCODE) long*   {
+    global::System.IntPtr cPtr=$imcall;
+    long[]ret=null;$excode
+    $csclassname ret1 = null;
+    if(cPtr != global::System.IntPtr.Zero) 
+		ret1 = new $csclassname(cPtr, $owner);
+	if(vecmap.ContainsKey(name))
+	{
+		int N=vecmap[name].Count;
+		ret=new long[N];
+		int i;
+		for(i=0;i<N;++i)
+			ret[i]=libhere.longArray_getitem(ret1,i);//vecmap[name][i];
 	}
     return ret;
   }
