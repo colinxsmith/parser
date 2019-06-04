@@ -210,8 +210,8 @@ optObj.PropertiesCA(n, nfac, names, w, bench, alpha, rreturn, areturn, Rreturn, 
     FL, FC, SV, ncomp, Composites);
 
 console.log('Absolute risk', arisk[0], optObj.ddotvec(n, w, MCTR));
-console.log('Relative risk', risk[0], optObj.ddotvec(n, w, MCAR) - optObj.ddotvec(n, bench, MCAR));
-console.log('Residual risk', Rrisk[0], optObj.ddotvec(n, w, MCRR) - pbeta[0] * optObj.ddotvec(n, bench, MCRR));
+console.log('Relative risk', risk[0], optObj.ddotvec(n, w, MCAR) - (bench.length ? optObj.ddotvec(n, bench, MCAR) : 0));
+console.log('Residual risk', Rrisk[0], optObj.ddotvec(n, w, MCRR) - (bench.length ? pbeta[0] * optObj.ddotvec(n, bench, MCRR) : 0));
 console.log('Portfolio beta', pbeta[0], optObj.ddotvec(n, w, beta));
 
 const fr = optObj.ddotvec(nfac, FMCTR, FX);
@@ -222,3 +222,21 @@ for (let i = nfac; i < n + nfac; ++i) {
 }
 console.log('Absolute Non-factor Risk', nfr);
 console.log('Absolute risk', Math.sqrt(fr * fr + nfr * nfr));
+
+const afr = optObj.ddotvec(nfac, FMCAR, AFX);
+console.log('Active Factor Risk', afr);
+let anfr = 0;
+for (let i = nfac; i < n + nfac; ++i) {
+    anfr += FMCAR[i] * (w[i - nfac] - (bench.length ? bench[i - nfac] : 0));
+}
+console.log('Active Non-factor Risk', anfr);
+console.log('Active risk', Math.sqrt(afr * afr + anfr * anfr));
+
+const Rfr = optObj.ddotvec(nfac, FMCRR, RFX);
+console.log('Residual Factor Risk', Rfr);
+let Rnfr = 0;
+for (let i = nfac; i < n + nfac; ++i) {
+    Rnfr += FMCRR[i] * (w[i - nfac] - (bench.length ? pbeta[0] * bench[i - nfac] : 0));
+}
+console.log('Residual Non-factor Risk', Rnfr);
+console.log('Residual risk', Math.sqrt(Rfr * Rfr + Rnfr * Rnfr));
