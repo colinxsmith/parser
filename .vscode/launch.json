@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "program": "${workspaceFolder}/checklog.js",
-                "runtimeVersion": "12.3.1"
+            "runtimeVersion": "12.3.1"
         },
         {
             "name": "Linux Launch Program",
