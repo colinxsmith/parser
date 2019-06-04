@@ -5,13 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Windows Launch Program",
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
             "program": "${workspaceFolder}/checklog.js",
-            "windows": {
                 "runtimeVersion": "12.3.1"
-            }
+        },
+        {
+            "name": "Linux Launch Program",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/checklog.js"
         }
     ]
 }
