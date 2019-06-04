@@ -12,7 +12,7 @@ for (let i = 0; i < line_len; ++i) {
 const fwords = new parseObj.StringVector(),
     space = ' ';
 const keys = 'n nfac m A L names soft_m soft_A soft_L soft_U soft_b soft_l U qbuy qsell alpha shortalphacost bench Q SV FL FC gamma initial delta buy sell qbuy qsell kappa basket longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum revise costs min_holding min_trade ls full minRisk maxRisk rmin rmax round min_lot size_lot ncomp Composites value valuel npiece hpiece pgrad nabs A_abs mabs I_A Abs_U Abs_L ShortCostScale mask issues five ten forty';
-const scalars = 'n nfac m soft_m gamma delta kappa basket revise costs rmin longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum value valuel npiece rmax minRisk maxRisk ls full min_trade min_holding round ncomp nabs mabs five ten forty ShortCostScale';
+const scalars = 'n nfac m soft_m gamma delta kappa basket revise costs rmin longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum value valuel npiece rmax minRisk maxRisk ls full round ncomp nabs mabs five ten forty ShortCostScale';
 parseObj.Parser('run.log', keys, read, line_len, fwords, DATA, space);
 keys.split(' ').forEach(kk => {
     const sss = scalars.split(' ');
@@ -67,20 +67,18 @@ const costs = +parseObj.geti(DATA, 'costs');
 const five = +parseObj.gets(DATA, 'five');
 const ten = +parseObj.gets(DATA, 'ten');
 const forty = +parseObj.gets(DATA, 'forty');
+
 let notV = 0;
-let min_holding = parseObj.getv(DATA, 'min_holding');
-let min_trade = parseObj.getv(DATA, 'min_trade');
+let min_holding = parseObj.getv(DATA, 'min_holding') === undefined ? [] : parseObj.getv(DATA, 'min_holding');
+let  min_trade = parseObj.getv(DATA, 'min_trade') === undefined ? [] : parseObj.getv(DATA, 'min_trade');
+
 if (!(min_holding.length === 0 || min_holding.length > 1)) {
     min_holding = +parseObj.gets(DATA, 'min_holding');
     notV++;
-} else {
-    min_holding = parseObj.getv(DATA, 'min_holding') === undefined ? [] : parseObj.getv(DATA, 'min_holding');
 }
 if (!(min_trade.length === 0 || min_trade.length > 1)) {
     min_trade = +parseObj.gets(DATA, 'min_trade');
     notV++;
-} else {
-    min_trade = parseObj.getv(DATA, 'min_trade') === undefined ? [] : parseObj.getv(DATA, 'min_trade');
 }
 
 const ls = +parseObj.geti(DATA, 'ls');
