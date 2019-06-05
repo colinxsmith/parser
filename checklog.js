@@ -70,7 +70,7 @@ const forty = +parseObj.gets(DATA, 'forty');
 
 let notV = 0;
 let min_holding = parseObj.getv(DATA, 'min_holding') === undefined ? [] : parseObj.getv(DATA, 'min_holding');
-let  min_trade = parseObj.getv(DATA, 'min_trade') === undefined ? [] : parseObj.getv(DATA, 'min_trade');
+let min_trade = parseObj.getv(DATA, 'min_trade') === undefined ? [] : parseObj.getv(DATA, 'min_trade');
 
 if (!(min_holding.length === 0 || min_holding.length > 1)) {
     min_holding = +parseObj.gets(DATA, 'min_holding');
@@ -81,22 +81,22 @@ if (!(min_trade.length === 0 || min_trade.length > 1)) {
     notV++;
 }
 
-if(notV===1){
-    if(min_trade.length===undefined){
+if (notV === 1) {
+    if (min_trade.length === undefined) {
         const mt = min_trade;
-        min_trade=[];
-        if(mt>0){
-            for(let i=0;i<n;++i){
+        min_trade = [];
+        if (mt > 0) {
+            for (let i = 0; i < n; ++i) {
                 min_trade.push(mt);
             }
         }
         notV--;
     }
-    if(min_holding.length===undefined){
+    if (min_holding.length === undefined) {
         const mt = min_holding;
-        min_holding=[];
-        if(mt>0){
-            for(let i=0;i<n;++i){
+        min_holding = [];
+        if (mt > 0) {
+            for (let i = 0; i < n; ++i) {
                 min_holding.push(mt);
             }
         }
