@@ -265,5 +265,7 @@ const runOpt = () => {
 
     exports.n = n;
     exports.w = w;
+    exports.initial = initial;
 }
 exports.runOpt = runOpt;
+// runOpt();
