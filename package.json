@@ -16,7 +16,8 @@
     "dependencies": {
         "express": "^4.17.1",
         "node": "^12.4.0",
-        "node-gyp": "^4.0.0"
+        "node-gyp": "^4.0.0",
+        "path": "^0.12.7"
     },
     "gypfile": true,
     "repository": {

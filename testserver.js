@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const display = require('./checklog');
 const bodyParser = require('body-parser');
 const app = express();
@@ -9,6 +10,7 @@ app
     .set('host', host)
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: false }))
+    .use(express.static(path.join(__dirname, 'dist')))
     .use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', '*');
@@ -19,10 +21,6 @@ app
     .get('/', (req, res) => {
         res.send('GET request to homepage');
         console.log('In get');
-    })
-    .post('/', (req, res) => {
-        res.send('POST request to the homepage');
-        console.log('In post');
     })
     .route('/opt')
     .get((req, res) => {
@@ -39,5 +37,7 @@ app
             .status(200)
             .json({ n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile });
     });
-
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
 app.listen(port, () => console.log(`Running on http://${host}:${port}`));
