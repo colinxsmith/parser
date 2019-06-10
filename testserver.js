@@ -28,7 +28,7 @@ app
         console.log('get opt', display.parseFile);
         res
             .status(200)
-            .json({ n: display.n, w: display.w, initial: display.initial,file: display.parseFile });
+            .json({ n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile });
     })
     .post(function (req, res) {
         console.log('post opt', req.body);
@@ -36,7 +36,7 @@ app
         console.log('After opt', display.parseFile);
         res
             .status(200)
-            .json({ n: display.n, w: display.w , initial: display.initial,file: display.parseFile});
+            .json({ n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile });
     });
 
 app.listen(port, () => console.log(`Running on http://${host}:${port}`));

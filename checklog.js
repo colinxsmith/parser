@@ -4,7 +4,7 @@ const optObj = require("../router/build/Release/OPT");
 
 const runOpt = (requests = {}) => {
     const DATA = new parseObj.StringMap();
-    
+
     const line_len = 50000;
     let read = '';
     for (let i = 0; i < line_len; ++i) {
@@ -15,7 +15,7 @@ const runOpt = (requests = {}) => {
     const scalars = 'n nfac m soft_m gamma delta kappa basket revise costs rmin longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum value valuel npiece rmax minRisk maxRisk ls full round ncomp nabs mabs five ten forty ShortCostScale';
     try {
         const back = parseObj.Parser(parseFile, keys, read, line_len, fwords, DATA, space);
-        if(back ===1)throw('Bad file name')
+        if (back === 1) throw ('Bad file name')
     } catch (error) {
         exports.parseFile = error;
         return;
@@ -271,6 +271,7 @@ const runOpt = (requests = {}) => {
 
     exports.n = n;
     exports.w = w;
+    exports.names = names;
     exports.initial = initial;
     exports.parseFile = parseFile;
 }
