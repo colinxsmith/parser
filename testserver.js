@@ -25,17 +25,18 @@ app
     })
     .route('/opt')
     .get(function (req, res) {
-        console.log('get opt', req.body);
+        console.log('get opt', display.parseFile);
         res
             .status(200)
-            .json({ n: display.n, w: display.w, initial: display.initial });
+            .json({ n: display.n, w: display.w, initial: display.initial,file: display.parseFile });
     })
     .post(function (req, res) {
         console.log('post opt', req.body);
-        display.runOpt();
+        display.runOpt(req.body);
+        console.log('After opt', display.parseFile);
         res
             .status(200)
-            .json({ n: display.n, w: display.w , initial: display.initial});
+            .json({ n: display.n, w: display.w , initial: display.initial,file: display.parseFile});
     });
 
 app.listen(port, () => console.log(`Running on http://${host}:${port}`));

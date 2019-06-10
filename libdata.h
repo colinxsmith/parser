@@ -137,7 +137,7 @@ void Parser(std::istream &input, const std::string words, char *read, const size
 	}
 }
 template <typename T>
-void Parser(const char *filename, const std::string words, char *read, const size_t line_len,
+int Parser(const char *filename, const std::string words, char *read, const size_t line_len,
 			std::vector<std::string> &fwords, std::map<std::string, std::vector<T>> &DATA, const char *space)
 {
 #ifdef TESTTYPE
@@ -145,15 +145,20 @@ void Parser(const char *filename, const std::string words, char *read, const siz
 	whichTemplate("Parser", num);
 #endif
 	std::ifstream infile;
+	int back=0;
+
 	infile.open(filename);
 	if (infile.is_open())
 	{
 		Parser(infile, words, read, line_len, fwords, DATA, space);
 		infile.close();
 	}
-	else
+	else{
 		std::cout << "\x1b[1;1;31mCannot open file " << filename << "\x1b[0;m" << std::endl;
+		back = 1;
+	}
 	infile.clear();
+	return back;
 }
 
 template <typename T>
