@@ -24,7 +24,9 @@ app
     })
     .route('/opt')
     .get((req, res) => {
-        console.log('get opt', display.parseFile);
+        const dd = new Date();
+        const timest = `${dd.getDate()}-${dd.getMonth()}-${dd.getFullYear()}:${dd.getHours()}:${dd.getMinutes()}:${dd.getSeconds()}`;
+        console.log('get opt', timest, display.parseFile);
         res
             .status(200)
             .json({ n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile });
@@ -32,7 +34,9 @@ app
     .post((req, res) => {
         console.log('post opt', req.body);
         display.runOpt(req.body);
-        console.log('After opt', display.parseFile);
+        const dd = new Date();
+        const timest = `${dd.getDate()}-${dd.getMonth()}-${dd.getFullYear()}:${dd.getHours()}:${dd.getMinutes()}:${dd.getSeconds()}`;
+        console.log('After opt', timest, display.parseFile);
         res
             .status(200)
             .json({ n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile });
