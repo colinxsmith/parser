@@ -242,6 +242,17 @@ const runOpt = (requests = {}) => {
     console.log('Residual risk\t', Rrisk[0], optObj.ddotvec(n, w, MCRR) - (bench.length ? pbeta[0] * optObj.ddotvec(n, bench, MCRR) : 0));
     console.log('Portfolio beta\t', pbeta[0], optObj.ddotvec(n, w, beta));
 
+    exports.MCTR = MCTR;
+    exports.MCAR = MCAR;
+    exports.arisk = arisk[0];
+    exports.risk = risk[0];
+    exports.benchmark = bench;
+    exports.alpha = alpha;
+    exports.areturn = areturn[0];
+    exports.return = rreturn[0];
+    exports.beta = beta;
+    exports.pbeta = pbeta[0];
+
     const fr = optObj.ddotvec(nfac, FMCTR, FX);
     console.log('Absolute Factor Risk\t', fr);
     let nfr = 0;

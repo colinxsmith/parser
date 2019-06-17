@@ -4,7 +4,7 @@ const display = require('./checklog');
 const bodyParser = require('body-parser');
 const app = express();
 
-const host = 'localhost', port = 3000;
+const host = '10.2.70.36', port = 3000;
 app
     .set('port', port)
     .set('host', host)
@@ -19,8 +19,7 @@ app
         next();
     })
     .get('/', (req, res) => {
-        res.send('GET request to homepage');
-        console.log('In get');
+        res.send('<b>Need to make application</b>');
     })
     .route('/opt')
     .get((req, res) => {
@@ -29,7 +28,12 @@ app
         console.log('get opt', timest, display.parseFile);
         res
             .status(200)
-            .json({ n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile });
+            .status(200)
+            .json({
+                n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
+                MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.ris, benchmark: display.benchmark,
+                alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta
+            });
     })
     .post((req, res) => {
         console.log('post opt', req.body);
@@ -39,9 +43,14 @@ app
         console.log('After opt', timest, display.parseFile);
         res
             .status(200)
-            .json({ n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile });
+            .json({
+                n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
+                MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.ris, benchmark: display.benchmark,
+                alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta
+            });
     });
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
+
 app.listen(port, () => console.log(`Running on http://${host}:${port}`));
