@@ -4,7 +4,7 @@ const display = require('./checklog');
 const bodyParser = require('body-parser');
 const app = express();
 
-const host = '10.2.70.36', port = 3000;
+const host = '192.168.0.27', port = 3000;
 app
     .set('port', port)
     .set('host', host)
