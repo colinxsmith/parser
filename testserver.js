@@ -49,8 +49,8 @@ app
                 alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta
             });
     });
-/* app.get('*', (req, res) => {
+ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
-});*/
+});
 
 app.listen(port, () => console.log(`Running on http://${host}:${port}`));
