@@ -186,6 +186,7 @@ const runOpt = (requests = {}) => {
         console.log('Turnover\t', turnover);
         console.log('Number of trades\t', trades);
         console.log('Minimum trade\t', mintrade);
+        exports.turnover = turnover;
     }
     w.forEach(d => {
         if (Math.abs(d) > rootEps) {
