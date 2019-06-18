@@ -31,8 +31,9 @@ app
             .status(200)
             .json({
                 n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
-                MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.ris, benchmark: display.benchmark,
-                alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta
+                MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
+                alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta,
+                turnover: display.turnover
             });
     })
     .post((req, res) => {
@@ -45,11 +46,12 @@ app
             .status(200)
             .json({
                 n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
-                MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.ris, benchmark: display.benchmark,
-                alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta
+                MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
+                alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta,
+                turnover: display.turnover
             });
     });
- app.get('*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
