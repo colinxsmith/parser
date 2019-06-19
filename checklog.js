@@ -10,7 +10,7 @@ const runOpt = (requests = {}) => {
     for (let i = 0; i < line_len; ++i) {
         read += 'a';
     }
-    const fwords = new parseObj.StringVector(), space = ' ', parseFile = requests.filename === undefined ? 'run.log' : requests.filename;
+    const fwords = new parseObj.StringVector(), space = ' ', parseFile = requests.filename === undefined || requests.filename === '' ? 'run.log' : requests.filename;
     const keys = 'n nfac m A L names soft_m soft_A soft_L soft_U soft_b soft_l U qbuy qsell alpha shortalphacost bench Q SV FL FC gamma initial delta buy sell qbuy qsell kappa basket longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum revise costs min_holding min_trade ls full minRisk maxRisk rmin rmax round min_lot size_lot ncomp Composites value valuel npiece hpiece pgrad nabs A_abs mabs I_A Abs_U Abs_L ShortCostScale mask issues five ten forty';
     const scalars = 'n nfac m soft_m gamma delta kappa basket revise costs rmin longbasket downrisk downfactor shortbasket tradebuy tradesell tradenum value valuel npiece rmax minRisk maxRisk ls full round ncomp nabs mabs five ten forty ShortCostScale';
     try {
@@ -283,7 +283,7 @@ const runOpt = (requests = {}) => {
 
     exports.n = n;
     exports.w = w;
-    exports.version=optObj.version();
+    exports.version = optObj.version().split('\n');
     exports.names = names;
     exports.initial = initial;
     exports.parseFile = parseFile;
