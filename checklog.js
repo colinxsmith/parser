@@ -283,6 +283,7 @@ const runOpt = (requests = {}) => {
 
     exports.n = n;
     exports.w = w;
+    exports.version=optObj.version();
     exports.names = names;
     exports.initial = initial;
     exports.parseFile = parseFile;
