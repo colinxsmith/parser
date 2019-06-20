@@ -34,7 +34,7 @@ const runOpt = (requests = {}) => {
     const n = +parseObj.geti(DATA, 'n');
     const nfac = +parseObj.geti(DATA, 'nfac');
     const names = parseObj.getv(DATA, 'names');
-    const m = +parseObj.geti(DATA, 'm');
+    let m = +parseObj.geti(DATA, 'm');
     const A = parseObj.getv(DATA, 'A') === undefined ? [] : parseObj.getv(DATA, 'A');
     const L = parseObj.getv(DATA, 'L') === undefined ? [] : parseObj.getv(DATA, 'L');
     const qbuy = parseObj.getv(DATA, 'qbuy') === undefined ? [] : parseObj.getv(DATA, 'qbuy');
@@ -56,7 +56,7 @@ const runOpt = (requests = {}) => {
     const gamma = +parseObj.gets(DATA, 'gamma');
     const initial = parseObj.getv(DATA, 'initial') === undefined ? [] : parseObj.getv(DATA, 'initial');
     const issues = parseObj.getv(DATA, 'issues') === undefined ? [] : parseObj.getv(DATA, 'issues');
-    const delta = +parseObj.gets(DATA, 'delta');
+    let delta = +parseObj.gets(DATA, 'delta');
     const buy = parseObj.getv(DATA, 'buy') === undefined ? [] : parseObj.getv(DATA, 'buy');
     const sell = parseObj.getv(DATA, 'sell') === undefined ? [] : parseObj.getv(DATA, 'sell');
     const kappa = +parseObj.gets(DATA, 'kappa');
@@ -112,8 +112,8 @@ const runOpt = (requests = {}) => {
 
     const ls = +parseObj.geti(DATA, 'ls');
     const full = +parseObj.gets(DATA, 'full');
-    const minRisk = +parseObj.gets(DATA, 'minRisk');
-    const maxRisk = +parseObj.gets(DATA, 'maxRisk');
+    let minRisk = +parseObj.gets(DATA, 'minRisk');
+    let maxRisk = +parseObj.gets(DATA, 'maxRisk');
     const rmin = +parseObj.gets(DATA, 'rmin');
     const rmax = +parseObj.gets(DATA, 'rmax');
     const round = +parseObj.geti(DATA, 'round');
@@ -144,8 +144,40 @@ const runOpt = (requests = {}) => {
         never_slow = 0,
         mem_kbytes = [1];
     let back;
+    let absRiskConstraint = false;
+    if (requests.desired !== {}) {
+        if (requests.desired.Trade !== undefined) {
+            delta = +requests.desired.Trade;
+            console.log('delta is reset to', delta);
+        }
+        if (requests.desired.MCAR !== undefined) {
+            minRisk = 0;
+            maxRisk = +requests.desired.MCAR;
+            absRiskConstraint = false;
+            console.log('maxRisk is reset to', maxRisk, absRiskConstraint);
+        } else if (requests.desired.MCTR !== undefined) {
+            minRisk = 0;
+            maxRisk = +requests.desired.MCTR;
+            absRiskConstraint = true;
+            console.log('maxRisk is reset to', maxRisk, absRiskConstraint);
+        } else {
+            minRisk = -1;
+            maxRisk = -1;
+        }
+        if (requests.desired.Beta !== undefined) {
+            L[m + n] = +requests.desired.Beta;
+            U[m + n] = +requests.desired.Beta;
+            optObj.dmx_transpose(m, n, A, A);
+            requests.desired.Betavec.forEach(d => {
+                A.push(d);
+            });
+            m++
+            optObj.dmx_transpose(n, m, A, A);
+            console.log('Beta constrained to', +requests.desired.Beta);
+        }
+    }
     if (notV === 2) {
-        back = optObj.Optimise_internalCVPAFblSaMSoftQ(n, nfac, names, w, m, A, L, U, alpha, bench, Q,
+        back = optObj.Optimise_internalCVPAFblSaMSoftQ(n, nfac, names, w, m, A, L, U, alpha, absRiskConstraint ? [] : bench, Q,
             gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
             ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
             npiece, hpiece, pgrad, nabs, A_abs, mabs, I_A, Abs_U, FC, FL, SV, minRisk, maxRisk, ogamma,
@@ -153,7 +185,7 @@ const runOpt = (requests = {}) => {
             zetaF, ShortCostScale, valuel, Abs_L, shortalphacost, never_slow, mem_kbytes, soft_m, soft_l,
             soft_b, soft_L, soft_U, soft_A, qbuy, qsell, five, ten, forty, issues);
     } else {
-        back = optObj.Optimise_internalCVPAFblSaMSoftQV(n, nfac, names, w, m, A, L, U, alpha, bench, Q,
+        back = optObj.Optimise_internalCVPAFblSaMSoftQV(n, nfac, names, w, m, A, L, U, alpha, absRiskConstraint ? [] : bench, Q,
             gamma, initial, delta, buy, sell, kappa, basket, tradenum, revise, costs, min_holding, min_trade,
             ls, full, rmin, rmax, round, min_lot, size_lot, shake, ncomp, Composites, value,
             npiece, hpiece, pgrad, nabs, A_abs, mabs, I_A, Abs_U, FC, FL, SV, minRisk, maxRisk, ogamma,
@@ -285,6 +317,7 @@ const runOpt = (requests = {}) => {
     exports.w = w;
     exports.version = optObj.version().split('\n');
     exports.names = names;
+    exports.returnMessage = optObj.Return_Message(back);
     exports.initial = initial;
     exports.parseFile = parseFile;
 }
