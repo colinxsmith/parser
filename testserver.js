@@ -32,7 +32,7 @@ app
                 n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
                 MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
                 alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta,
-                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage
+                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage, ogamma: display.ogamma
             });
     })
     .post((req, res) => {

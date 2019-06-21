@@ -150,7 +150,7 @@ const runOpt = (requests = {}) => {
         if (requests.desired.gamma !== undefined) {
             gamma = +requests.desired.gamma;
             if (gamma >= 1) {
-                gamma = 1 - eps;
+                gamma = 1.0 - 2.0*eps;
             }
         }
         if (requests.desired.Trade !== undefined) {
