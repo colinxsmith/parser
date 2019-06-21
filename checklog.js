@@ -53,7 +53,7 @@ const runOpt = (requests = {}) => {
     const SV = parseObj.getv(DATA, 'SV') === undefined ? [] : parseObj.getv(DATA, 'SV');
     const FL = parseObj.getv(DATA, 'FL') === undefined ? [] : parseObj.getv(DATA, 'FL');
     const FC = parseObj.getv(DATA, 'FC') === undefined ? [] : parseObj.getv(DATA, 'FC');
-    const gamma = +parseObj.gets(DATA, 'gamma');
+    let gamma = +parseObj.gets(DATA, 'gamma');
     const initial = parseObj.getv(DATA, 'initial') === undefined ? [] : parseObj.getv(DATA, 'initial');
     const issues = parseObj.getv(DATA, 'issues') === undefined ? [] : parseObj.getv(DATA, 'issues');
     let delta = +parseObj.gets(DATA, 'delta');
@@ -146,6 +146,13 @@ const runOpt = (requests = {}) => {
     let back;
     let absRiskConstraint = false;
     if (requests.desired !== {}) {
+        const eps = Math.abs((4 / 3 - 1) * 3 - 1);
+        if (requests.desired.gamma !== undefined) {
+            gamma = +requests.desired.gamma;
+            if (gamma >= 1) {
+                gamma = 1 - eps;
+            }
+        }
         if (requests.desired.Trade !== undefined) {
             delta = +requests.desired.Trade.split(',')[0];
             console.log('delta is reset to', delta);
@@ -349,6 +356,7 @@ const runOpt = (requests = {}) => {
     exports.returnMessage = optObj.Return_Message(back);
     exports.initial = initial;
     exports.parseFile = parseFile;
+    exports.ogamma = ogamma[0];
 }
 exports.runOpt = runOpt;
 // runOpt();

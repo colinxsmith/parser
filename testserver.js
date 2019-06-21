@@ -28,7 +28,6 @@ app
         console.log('get opt', timest, display.parseFile);
         res
             .status(200)
-            .status(200)
             .json({
                 n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
                 MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
@@ -48,11 +47,13 @@ app
                 n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
                 MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
                 alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta,
-                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage
+                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage, ogamma: display.ogamma
             });
     });
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
+    res
+        .sendFile(path.join(__dirname, 'dist/index.html'))
+        .status(200);
 });
 
 app.listen(port, () => console.log(`Running on http://${host}:${port}`));
