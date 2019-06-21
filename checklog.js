@@ -53,7 +53,7 @@ const runOpt = (requests = {}) => {
     const SV = parseObj.getv(DATA, 'SV') === undefined ? [] : parseObj.getv(DATA, 'SV');
     const FL = parseObj.getv(DATA, 'FL') === undefined ? [] : parseObj.getv(DATA, 'FL');
     const FC = parseObj.getv(DATA, 'FC') === undefined ? [] : parseObj.getv(DATA, 'FC');
-    const gamma = +parseObj.gets(DATA, 'gamma');
+    let gamma = +parseObj.gets(DATA, 'gamma');
     const initial = parseObj.getv(DATA, 'initial') === undefined ? [] : parseObj.getv(DATA, 'initial');
     const issues = parseObj.getv(DATA, 'issues') === undefined ? [] : parseObj.getv(DATA, 'issues');
     let delta = +parseObj.gets(DATA, 'delta');
@@ -146,34 +146,61 @@ const runOpt = (requests = {}) => {
     let back;
     let absRiskConstraint = false;
     if (requests.desired !== {}) {
+        const eps = Math.abs((4 / 3 - 1) * 3 - 1);
+        if (requests.desired.gamma !== undefined) {
+            gamma = +requests.desired.gamma;
+            if (gamma >= 1) {
+                gamma = 1 - eps;
+            }
+        }
         if (requests.desired.Trade !== undefined) {
-            delta = +requests.desired.Trade;
+            delta = +requests.desired.Trade.split(',')[0];
             console.log('delta is reset to', delta);
         }
         if (requests.desired.MCAR !== undefined) {
-            minRisk = 0;
-            maxRisk = +requests.desired.MCAR;
+            const uL = requests.desired.MCAR.split(',');
+            if (uL.length === 2) {
+                minRisk = +uL[0];
+                maxRisk = +uL[1];
+            } else if (uL.length === 1) {
+                minRisk = +uL[0];
+                maxRisk = +uL[0];
+            }
             absRiskConstraint = false;
+            console.log('minRisk is reset to', minRisk, absRiskConstraint);
             console.log('maxRisk is reset to', maxRisk, absRiskConstraint);
         } else if (requests.desired.MCTR !== undefined) {
-            minRisk = 0;
-            maxRisk = +requests.desired.MCTR;
+            const uL = requests.desired.MCTR.split(',');
+            if (uL.length === 2) {
+                minRisk = +uL[0];
+                maxRisk = +uL[1];
+            } else if (uL.length === 1) {
+                minRisk = +uL[0];
+                maxRisk = +uL[0];
+            }
             absRiskConstraint = true;
+            console.log('minRisk is reset to', minRisk, absRiskConstraint);
             console.log('maxRisk is reset to', maxRisk, absRiskConstraint);
-        } else {
+        } /* else {
             minRisk = -1;
             maxRisk = -1;
-        }
+        }*/
         if (requests.desired.Beta !== undefined) {
-            L[m + n] = +requests.desired.Beta;
-            U[m + n] = +requests.desired.Beta;
+            const uL = requests.desired.Beta.split(',');
+            if (uL.length === 2) {
+                L[m + n] = +uL[0];
+                U[m + n] = +uL[1];
+            } else if (uL.length === 1) {
+                L[m + n] = +uL[0];
+                U[m + n] = +uL[0];
+            }
             optObj.dmx_transpose(m, n, A, A);
             requests.desired.Betavec.forEach(d => {
                 A.push(d);
             });
             m++
             optObj.dmx_transpose(n, m, A, A);
-            console.log('Beta constrained to', +requests.desired.Beta);
+            console.log('Beta constrained to', requests.desired.Beta.split(','));
         }
     }
     if (notV === 2) {
@@ -236,10 +263,19 @@ const runOpt = (requests = {}) => {
         pbeta, ncomp, Composites);
 
     console.log('Absolute Risk\t', arisk[0]);
+    console.log('Relative Risk\t', risk[0]);
     if (maxRisk >= 0 && minRisk >= 0) {
-        console.log('min risk\t', minRisk, 'risk\t', risk[0], 'max risk\t', maxRisk, 'gamma\t', gamma, ogamma[0]);
+        if (absRiskConstraint) {
+            console.log('min Absolute risk\t', minRisk, 'risk\t', arisk[0], 'max risk\t', maxRisk, 'gamma\t', gamma, ogamma[0]);
+        } else {
+            console.log('min Relative risk\t', minRisk, 'risk\t', risk[0], 'max risk\t', maxRisk, 'gamma\t', gamma, ogamma[0]);
+        }
     } else {
-        console.log('Relative Risk\t', risk[0], 'gamma\t', gamma);
+        if (absRiskConstraint) {
+            console.log('Absolute Risk\t', arisk[0], 'gamma\t', gamma);
+        } else {
+            console.log('Relative Risk\t', risk[0], 'gamma\t', gamma);
+        }
     }
     const absReturn = optObj.ddotvec(n, w, alpha);
     console.log('Absolute Return\t', absReturn);
@@ -320,6 +356,7 @@ const runOpt = (requests = {}) => {
     exports.returnMessage = optObj.Return_Message(back);
     exports.initial = initial;
     exports.parseFile = parseFile;
+    exports.ogamma = ogamma[0];
 }
 exports.runOpt = runOpt;
 // runOpt();
