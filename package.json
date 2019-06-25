@@ -8,7 +8,7 @@
         "installOptW": "\\cygwin\\bin\\bash -c \"PATH=$PATH:/usr/bin;dos2unix mkWrapCxx.sh\" && \\cygwin\\bin\\bash mkWrapCxx.sh && node-gyp rebuild && npm run runme",
         "runme": "node runme.js",
         "logger": "node checklog.js",
-        "server": "node testserver.js",
+        "server": "export LD_LIBRARY_PATH=/home/colin/safeqp && node testserver.js",
         "install": "node-gyp rebuild"
     },
     "author": "",

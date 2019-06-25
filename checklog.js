@@ -136,6 +136,7 @@ const runOpt = (requests = {}) => {
     const mask = parseObj.getv(DATA, 'mask') === undefined ? [] : parseObj.getv(DATA, 'mask');
     const w = Array(n);
     const ogamma = Array(1);
+    let gammaf = gamma;
     const shake = Array(n);
     const log = 2;
     const logfile = 'opt.log';
@@ -147,11 +148,13 @@ const runOpt = (requests = {}) => {
     let absRiskConstraint = false;
     if (requests.desired !== {}) {
         const eps = Math.abs((4 / 3 - 1) * 3 - 1);
+        console.log('gamma from client', requests.desired.gamma)
         if (requests.desired.gamma !== undefined) {
             gamma = +requests.desired.gamma;
-            if (gamma >= 1) {
-                gamma = 1.0 - 2.0*eps;
-            }
+            gammaf = gamma;
+        }
+        if (gamma >= 1) {
+            gamma = 1.0 - 2.0 * eps;
         }
         if (requests.desired.Trade !== undefined) {
             delta = +requests.desired.Trade.split(',')[0];
@@ -356,6 +359,7 @@ const runOpt = (requests = {}) => {
     exports.returnMessage = optObj.Return_Message(back);
     exports.initial = initial;
     exports.parseFile = parseFile;
+    exports.gamma = gammaf;
     exports.ogamma = ogamma[0];
 }
 exports.runOpt = runOpt;

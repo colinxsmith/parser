@@ -4,7 +4,7 @@ const display = require('./checklog');
 const bodyParser = require('body-parser');
 const app = express();
 
-const host = '192.168.0.27', port = 3000;
+const host = '10.2.70.36', port = 3000;
 app
     .set('port', port)
     .set('host', host)
@@ -32,7 +32,8 @@ app
                 n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
                 MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
                 alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta,
-                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage, ogamma: display.ogamma
+                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage,
+                ogamma: display.ogamma, gamma: display.gamma
             });
     })
     .post((req, res) => {
@@ -47,7 +48,8 @@ app
                 n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
                 MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
                 alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta,
-                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage, ogamma: display.ogamma
+                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage,
+                ogamma: display.ogamma, gamma: display.gamma
             });
     });
 app.get('*', (req, res) => {
