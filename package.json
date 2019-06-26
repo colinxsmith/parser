@@ -9,6 +9,7 @@
         "runme": "node runme.js",
         "logger": "node checklog.js",
         "server": "export LD_LIBRARY_PATH=/home/colin/safeqp && node testserver.js",
+        "serverW": "node testserver.js",
         "install": "node-gyp rebuild"
     },
     "author": "",
