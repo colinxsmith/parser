@@ -26,7 +26,7 @@ app
     .route('/opt')
     .get((req, res) => {
         const dd = new Date();
-        const timest = `${dd.getDate()}-${dd.getMonth()}-${dd.getFullYear()};${dd.toLocaleTimeString()}`;
+        const timest = `${dd.getDate()}-${dd.getMonth() + 1}-${dd.getFullYear()};${dd.toLocaleTimeString()}`;
         console.log('get opt', timest, display.parseFile);
         res
             .status(200)
@@ -42,7 +42,7 @@ app
         console.log('post opt', req.body);
         display.runOpt(req.body);
         const dd = new Date();
-        const timest = `${dd.getDate()}-${dd.getMonth()}-${dd.getFullYear()};${dd.toLocaleTimeString()}`;
+        const timest = `${dd.getDate()}-${dd.getMonth() + 1}-${dd.getFullYear()};${dd.toLocaleTimeString()}`;
         console.log('After opt', timest, display.parseFile);
         res
             .status(200)
