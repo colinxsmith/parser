@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const display = require('./checklog');
 const bodyParser = require('body-parser');
+const ETL = require('../CVARserver/cvarOpt');
 const app = express();
 
 const host = '10.2.70.36', port = 3000;
@@ -54,6 +55,24 @@ app
                 ogamma: display.ogamma, gamma: display.gamma
             });
     });
+app.route('/etl')
+    .post((req, res) => {
+        console.log(ETL);
+        console.log('post opt', req.body);
+        const dd = new Date();
+        const timest = `${dd.getDate()}-${dd.getMonth() + 1}-${dd.getFullYear()};${dd.toLocaleTimeString()}`;
+        console.log('After opt', timest, display.parseFile);
+        ETL.optEtl(req.body);
+        back = {};
+        back.names=ETL.names;
+        back.lower=req.body.lower;
+        back.upper=req.body.upper;
+        back.weights=ETL.weights;
+        res
+            .status(200)
+            .json(back);
+    })
+    ;
 app.get('*', (req, res) => {
     res
         .sendFile(path.join(__dirname, 'dist/index.html'))
