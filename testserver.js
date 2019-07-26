@@ -57,16 +57,109 @@ app
     });
 app.route('/etl')
     .post((req, res) => {
+        const mock = false;
+        var back = {};
         console.log(ETL);
-        const dd = new Date();
-        const timest = `${dd.getDate()}-${dd.getMonth() + 1}-${dd.getFullYear()};${dd.toLocaleTimeString()}`;
+        var dd = new Date();
+        var timest = `${dd.getDate()}-${dd.getMonth() + 1}-${dd.getFullYear()};${dd.toLocaleTimeString()}`;
         console.log('Ready for ETL opt', timest, req.body);
-        ETL.optEtl(req.body);
-        back = {};
-        back.names=ETL.names;
-        back.lower=req.body.lower;
-        back.upper=req.body.upper;
-        back.weights=ETL.weights;
+        if (!mock) {
+            ETL.optEtl(req.body);
+            back.names = ETL.names;
+            back.lower = req.body.lower;
+            back.upper = req.body.upper;
+            back.weights = ETL.weights;
+            var send = [];
+            back.names.forEach((d, i) => {
+                send.push({
+                    names: d,
+                    lower: back.lower[i],
+                    upper: back.upper[i],
+                    weights: back.weights[i]
+                });
+            });
+            back = {};
+            back.port = send;
+            back.ETL = ETL.CVAR;
+            back.RISK = ETL.RISK;
+            back.RETURN = ETL.RETURN;
+            back.message = ETL.message;
+        } else {
+            back = {
+                port: [
+                    { names: 'stock1', lower: 0, upper: 0.95, weights: 0.95 },
+                    {
+                        names: 'stock2',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.0034620532275394487
+                    },
+                    {
+                        names: 'stock3',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.001375697739472369
+                    },
+                    {
+                        names: 'stock4',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.000584089316358564
+                    },
+                    { names: 'stock5', lower: 0, upper: 1, weights: 0 },
+                    { names: 'stock6', lower: 0, upper: 1, weights: 0 },
+                    {
+                        names: 'stock7',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.00188133129529709
+                    },
+                    {
+                        names: 'stock8',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.0007082300054808276
+                    },
+                    {
+                        names: 'stock9',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.030735618774106674
+                    },
+                    { names: 'stock10', lower: 0, upper: 1, weights: 0 },
+                    { names: 'stock11', lower: 0.01, upper: 1, weights: 0.01 },
+                    { names: 'stock12', lower: 0, upper: 1, weights: 0 },
+                    { names: 'stock13', lower: 0, upper: 1, weights: 0 },
+                    { names: 'stock14', lower: 0, upper: 1, weights: 0 },
+                    {
+                        names: 'stock15',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.000699797056674238
+                    },
+                    {
+                        names: 'stock16',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.00022128739299418073
+                    },
+                    { names: 'stock17', lower: 0, upper: 1, weights: 0 },
+                    { names: 'stock18', lower: 0, upper: 1, weights: 0 },
+                    {
+                        names: 'stock19',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.00033189515389107574
+                    }
+                ],
+                ETL: 0.00022884377628430353,
+                RISK: 0.0001519560272414885,
+                RETURN: -0.00006997983222045976,
+                message: 'Optimal Solution Found'
+            }
+        }
+
+        console.log(back);
         res
             .status(200)
             .json(back);
@@ -74,8 +167,8 @@ app.route('/etl')
     ;
 app.get('*', (req, res) => {
     res
-        .sendFile(path.join(__dirname, 'dist/index.html'))
-        .status(200);
+        .status(200)
+        .sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 app.listen(port, () => console.log(`Running on http://${host}:${port}`));
