@@ -58,10 +58,9 @@ app
 app.route('/etl')
     .post((req, res) => {
         console.log(ETL);
-        console.log('post opt', req.body);
         const dd = new Date();
         const timest = `${dd.getDate()}-${dd.getMonth() + 1}-${dd.getFullYear()};${dd.toLocaleTimeString()}`;
-        console.log('After opt', timest, display.parseFile);
+        console.log('Ready for ETL opt', timest, req.body);
         ETL.optEtl(req.body);
         back = {};
         back.names=ETL.names;
