@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const display = require('./checklog');
 const bodyParser = require('body-parser');
-const ETL = require('../CVARserver/cvarOpt');
+const ETL = require('/home/colin/CVARserver/cvarOpt');
 const app = express();
 
 const host = '192.168.0.21', port = 3000;
@@ -69,13 +69,15 @@ app.route('/etl')
             back.lower = req.body.lower;
             back.upper = req.body.upper;
             back.weights = ETL.weights;
+            back.alpha = ETL.alpha;
             var send = [];
             back.names.forEach((d, i) => {
                 send.push({
                     names: d,
                     lower: back.lower[i],
                     upper: back.upper[i],
-                    weights: back.weights[i]
+                    weights: back.weights[i],
+                    alpha: back.alpha[i]
                 });
             });
             back = {};
