@@ -70,6 +70,7 @@ app.route('/etl')
             back.upper = req.body.upper;
             back.weights = ETL.weights;
             back.alpha = ETL.alpha;
+            back.initial = ETL.initial;
             var send = [];
             back.names.forEach((d, i) => {
                 send.push({
@@ -77,7 +78,8 @@ app.route('/etl')
                     lower: back.lower[i],
                     upper: back.upper[i],
                     weights: back.weights[i],
-                    alpha: back.alpha[i]
+                    alpha: back.alpha[i],
+                    initial: back.initial[i]
                 });
             });
             back = {};
@@ -87,148 +89,147 @@ app.route('/etl')
             back.RETURN = ETL.RETURN;
             back.message = ETL.message;
         } else {
-            back =
-                {
-                    port: [
-                        {
-                            names: 'stock1',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0.9999885567186283,
-                            alpha: -0.00006967888564560825
-                        },
-                        {
-                            names: 'stock2',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.00019778336984659978
-                        },
-                        {
-                            names: 'stock3',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.00013070801260032006
-                        },
-                        {
-                            names: 'stock4',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.0005738216532726405
-                        },
-                        {
-                            names: 'stock5',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.00021616590634767545
-                        },
-                        {
-                            names: 'stock6',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.00013233548268475105
-                        },
-                        {
-                            names: 'stock7',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.0002162746654549098
-                        },
-                        {
-                            names: 'stock8',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.00012121205414678522
-                        },
-                        {
-                            names: 'stock9',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.00002769519237474141
-                        },
-                        {
-                            names: 'stock10',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.00008751751417240803
-                        },
-                        {
-                            names: 'stock11',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0.0000074751516792277136,
-                            alpha: -0.00006194066595877637
-                        },
-                        {
-                            names: 'stock12',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.0005301788133699578
-                        },
-                        {
-                            names: 'stock13',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.0008032865539833658
-                        },
-                        {
-                            names: 'stock14',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0.0000023136856920807504,
-                            alpha: -0.0008151024055437901
-                        },
-                        {
-                            names: 'stock15',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0.000001009303998054731,
-                            alpha: -0.00026276604407914875
-                        },
-                        {
-                            names: 'stock16',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.0009419526350551995
-                        },
-                        {
-                            names: 'stock17',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.0006309662652433158
-                        },
-                        {
-                            names: 'stock18',
-                            lower: 0,
-                            upper: 1,
-                            weights: 0,
-                            alpha: -0.0004669647078967842
-                        },
-                        {
-                            names: 'stock19',
-                            lower: 0,
-                            upper: 1,
-                            weights: 6.451489581716868e-7,
-                            alpha: -0.0006914397336968808
-                        }
-                    ],
-                    ETL: -0.00001593711855531466,
-                    RISK: 0.00008240172922072962,
-                    RETURN: -0.00006968114848960325,
-                    message: 'Optimal Solution Found'
-                }
+            back = {
+                port: [
+                    {
+                        names: 'stock1',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.9999890332685901,
+                        alpha: 0.00006967888564560825
+                    },
+                    {
+                        names: 'stock2',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.00019778336984659978
+                    },
+                    {
+                        names: 'stock3',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.00013070801260032006
+                    },
+                    {
+                        names: 'stock4',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.0005738216532726405
+                    },
+                    {
+                        names: 'stock5',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.00021616590634767545
+                    },
+                    {
+                        names: 'stock6',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.00013233548268475105
+                    },
+                    {
+                        names: 'stock7',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.0002162746654549098
+                    },
+                    {
+                        names: 'stock8',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.00012121205414678522
+                    },
+                    {
+                        names: 'stock9',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.00002769519237474141
+                    },
+                    {
+                        names: 'stock10',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.00008751751417240803
+                    },
+                    {
+                        names: 'stock11',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.000007246507524722272,
+                        alpha: 0.00006194066595877637
+                    },
+                    {
+                        names: 'stock12',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.0005301788133699578
+                    },
+                    {
+                        names: 'stock13',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.0008032865539833658
+                    },
+                    {
+                        names: 'stock14',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.0000020494351129108134,
+                        alpha: 0.0008151024055437901
+                    },
+                    {
+                        names: 'stock15',
+                        lower: 0,
+                        upper: 1,
+                        weights: 9.667001603931518e-7,
+                        alpha: 0.00026276604407914875
+                    },
+                    {
+                        names: 'stock16',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.0009419526350551995
+                    },
+                    {
+                        names: 'stock17',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: 0.0006309662652433158
+                    },
+                    {
+                        names: 'stock18',
+                        lower: 0,
+                        upper: 1,
+                        weights: -4.514708818330532e-8,
+                        alpha: 0.0004669647078967842
+                    },
+                    {
+                        names: 'stock19',
+                        lower: 0,
+                        upper: 1,
+                        weights: 7.492410024489127e-7,
+                        alpha: 0.0006914397336968808
+                    }
+                ],
+                ETL: -0.000015937162015038233,
+                RISK: 0.00008240211720058289,
+                RETURN: 0.00006968099183785625,
+                message: 'Optimal Solution Found'
+            }
         }
 
         console.log(back);
