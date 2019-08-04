@@ -92,6 +92,8 @@ app.route('/etl')
             back.RISK = ETL.RISK;
             back.RETURN = ETL.RETURN;
             back.message = ETL.message;
+          back.gamma=ETL.gamma;
+          back.relEtl=ETL.relEtl;
         } else {
             back = 
             {
