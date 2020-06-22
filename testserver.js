@@ -5,7 +5,8 @@ const bodyParser = require('body-parser');
 const ETL = require('/home/colin/CVARserver/cvarOpt');
 const app = express();
 
-const host = '10.2.70.36', port = 3000;
+const host = '10.2.70.36',
+    port = 3000;
 app
     .set('port', port)
     .set('host', host)
@@ -32,11 +33,26 @@ app
         res
             .status(200)
             .json({
-                n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
-                MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
-                alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta,
-                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage,
-                ogamma: display.ogamma, gamma: display.gamma
+                n: display.n,
+                w: display.w,
+                names: display.names,
+                initial: display.initial,
+                file: display.parseFile,
+                MCTR: display.MCTR,
+                MCAR: display.MCAR,
+                arisk: display.arisk,
+                risk: display.risk,
+                benchmark: display.benchmark,
+                alpha: display.alpha,
+                areturn: display.areturn,
+                return: display.return,
+                beta: display.beta,
+                pbeta: display.pbeta,
+                turnover: display.turnover,
+                version: display.version,
+                returnmessage: display.returnMessage,
+                ogamma: display.ogamma,
+                gamma: display.gamma
             });
     })
     .post((req, res) => {
@@ -48,11 +64,26 @@ app
         res
             .status(200)
             .json({
-                n: display.n, w: display.w, names: display.names, initial: display.initial, file: display.parseFile,
-                MCTR: display.MCTR, MCAR: display.MCAR, arisk: display.arisk, risk: display.risk, benchmark: display.benchmark,
-                alpha: display.alpha, areturn: display.areturn, return: display.return, beta: display.beta, pbeta: display.pbeta,
-                turnover: display.turnover, version: display.version, returnmessage: display.returnMessage,
-                ogamma: display.ogamma, gamma: display.gamma
+                n: display.n,
+                w: display.w,
+                names: display.names,
+                initial: display.initial,
+                file: display.parseFile,
+                MCTR: display.MCTR,
+                MCAR: display.MCAR,
+                arisk: display.arisk,
+                risk: display.risk,
+                benchmark: display.benchmark,
+                alpha: display.alpha,
+                areturn: display.areturn,
+                return: display.return,
+                beta: display.beta,
+                pbeta: display.pbeta,
+                turnover: display.turnover,
+                version: display.version,
+                returnmessage: display.returnMessage,
+                ogamma: display.ogamma,
+                gamma: display.gamma
             });
     });
 app.route('/etl')
@@ -92,169 +123,169 @@ app.route('/etl')
             back.RISK = ETL.RISK;
             back.RETURN = ETL.RETURN;
             back.message = ETL.message;
-          back.gamma=ETL.gamma;
-          back.relEtl=ETL.relEtl;
+            back.back = ETL.back;
+            back.gamma = ETL.gamma;
+            back.relEtl = ETL.relEtl;
         } else {
-            back = 
-            {
-              port: [
-                {
-                  names: 'stock1',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0.999989033265277,
-                  alpha: -0.00006967888564560825,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock2',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.00019778336984659978,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock3',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.00013070801260032006,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock4',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.0005738216532726405,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock5',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.00021616590634767545,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock6',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.00013233548268475105,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock7',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.0002162746654549098,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock8',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.00012121205414678522,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock9',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.00002769519237474141,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock10',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.00008751751417240803,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock11',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0.000007246530287519801,
-                  alpha: -0.00006194066595877637,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock12',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.0005301788133699578,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock13',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.0008032865539833658,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock14',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0.000002049417669651731,
-                  alpha: -0.0008151024055437901,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock15',
-                  lower: 0,
-                  upper: 1,
-                  weights: 9.666817502939082e-7,
-                  alpha: -0.00026276604407914875,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock16',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.0009419526350551995,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock17',
-                  lower: 0,
-                  upper: 1,
-                  weights: 0,
-                  alpha: -0.0006309662652433158,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock18',
-                  lower: 0,
-                  upper: 1,
-                  weights: -4.513529349440904e-8,
-                  alpha: -0.0004669647078967842,
-                  initial: 0.05263157894736842
-                },
-                {
-                  names: 'stock19',
-                  lower: 0,
-                  upper: 1,
-                  weights: 7.492456123255883e-7,
-                  alpha: -0.0006914397336968808,
-                  initial: 0.05263157894736842
-                }
-              ],
-              ETL: -0.00001593716199763101,
-              RISK: 0.00008240211721500843,
-              RETURN: -0.0000696809918286749,
-              message: 'Optimal Solution Found'
+            back = {
+                port: [{
+                        names: 'stock1',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.999989033265277,
+                        alpha: -0.00006967888564560825,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock2',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.00019778336984659978,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock3',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.00013070801260032006,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock4',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.0005738216532726405,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock5',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.00021616590634767545,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock6',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.00013233548268475105,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock7',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.0002162746654549098,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock8',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.00012121205414678522,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock9',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.00002769519237474141,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock10',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.00008751751417240803,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock11',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.000007246530287519801,
+                        alpha: -0.00006194066595877637,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock12',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.0005301788133699578,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock13',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.0008032865539833658,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock14',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0.000002049417669651731,
+                        alpha: -0.0008151024055437901,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock15',
+                        lower: 0,
+                        upper: 1,
+                        weights: 9.666817502939082e-7,
+                        alpha: -0.00026276604407914875,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock16',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.0009419526350551995,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock17',
+                        lower: 0,
+                        upper: 1,
+                        weights: 0,
+                        alpha: -0.0006309662652433158,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock18',
+                        lower: 0,
+                        upper: 1,
+                        weights: -4.513529349440904e-8,
+                        alpha: -0.0004669647078967842,
+                        initial: 0.05263157894736842
+                    },
+                    {
+                        names: 'stock19',
+                        lower: 0,
+                        upper: 1,
+                        weights: 7.492456123255883e-7,
+                        alpha: -0.0006914397336968808,
+                        initial: 0.05263157894736842
+                    }
+                ],
+                ETL: -0.00001593716199763101,
+                RISK: 0.00008240211721500843,
+                RETURN: -0.0000696809918286749,
+                back: 0,
+                message: 'Optimal Solution Found'
             }
         }
 
@@ -262,8 +293,7 @@ app.route('/etl')
         res
             .status(200)
             .json(back);
-    })
-    ;
+    });
 app.get('*', (req, res) => {
     res
         .status(200)
