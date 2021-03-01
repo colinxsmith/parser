@@ -16,3 +16,4 @@
  sed -i "/SetHiddenPrototype/s|_exports|// _exports|"  $file
  sed -i "/handle.MarkIndependent(/s|cdata|// cdata|" $file
  
+vi -s sed1 $file
